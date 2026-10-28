@@ -2,23 +2,23 @@ import React from 'react';
 
 export default function Loading() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
-      {/* Pulsing Gold Crown Silhouette */}
-      <div className="w-12 h-12 rounded-2xl bg-neutral-900 border border-[#D6AC63]/40 flex items-center justify-center animate-pulse shadow-lg shadow-[#D6AC63]/10">
+    <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4 bg-[#000000]">
+      {/* Sleek Apple Silhouette */}
+      <div className="w-12 h-12 rounded-2xl bg-[#161617] border border-white/[0.08] flex items-center justify-center animate-pulse">
         <svg
-          className="w-6 h-6 text-[#D6AC63]"
+          className="w-6 h-6 text-[#f5f5f7]"
           viewBox="0 0 24 24"
           fill="currentColor"
         >
-          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.84c.64-.78 1.08-1.87.96-2.96-.93.04-2.07.62-2.73 1.4-.58.67-1.09 1.76-.95 2.82 1.04.08 2.08-.48 2.72-1.26" />
         </svg>
       </div>
 
       <div className="space-y-1 text-center">
-        <span className="text-xs font-mono font-bold text-[#F1D49A] tracking-widest uppercase">
+        <span className="text-xs font-mono font-medium text-[#86868b] tracking-widest uppercase">
           APPLE KING
         </span>
-        <p className="text-xs text-neutral-500">جاري تحميل المنتجات والأسعار المعتمدة...</p>
+        <p className="text-xs text-[#86868b]">جاري تجهيز الكتالوج الرسمي...</p>
       </div>
     </div>
   );

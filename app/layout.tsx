@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className="dark">
-      <body className="min-h-screen bg-[#050505] text-[#F8F8F8] antialiased selection:bg-[#D6AC63] selection:text-black flex flex-col justify-between">
+      <body className="min-h-screen bg-[#000000] text-[#f5f5f7] antialiased selection:bg-[#0071e3] selection:text-white flex flex-col justify-between">
         <Header />
         <main className="flex-1 w-full min-w-0">{children}</main>
         <Footer />

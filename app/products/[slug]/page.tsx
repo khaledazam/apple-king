@@ -97,7 +97,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   };
 
   return (
-    <div className="bg-[#050505] min-h-screen py-10">
+    <div className="bg-[#000000] min-h-screen py-10">
       {/* Inject JSON-LD */}
       <script
         type="application/ld+json"
@@ -106,7 +106,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs text-neutral-400">
+        <nav className="flex items-center gap-2 text-xs text-[#86868b]">
           <Link href="/" className="hover:text-white transition-colors">
             الرئيسية
           </Link>
@@ -122,7 +122,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
             {product.brand}
           </Link>
           <span>/</span>
-          <span className="text-[#F1D49A] font-semibold line-clamp-1 max-w-xs">
+          <span className="text-[#f5f5f7] font-medium line-clamp-1 max-w-xs">
             {product.titleAr || product.title}
           </span>
         </nav>
@@ -132,22 +132,22 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {/* Related Products Recommendation */}
         {relatedProducts.length > 0 && (
-          <section className="pt-16 border-t border-neutral-900 space-y-8">
+          <section className="pt-16 border-t border-white/[0.08] space-y-8">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-bold text-[#D6AC63] uppercase tracking-widest font-mono">
-                  RELATED PRODUCTS
+                <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider font-mono">
+                  موديلات مشابهة
                 </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#f5f5f7] mt-1 tracking-tight">
                   أجهزة أخرى قد تهمك
                 </h2>
               </div>
               <Link
                 href={`/products?brand=${encodeURIComponent(product.brand)}`}
-                className="text-xs text-[#D6AC63] hover:text-[#F1D49A] flex items-center gap-1 font-semibold"
+                className="text-sm text-[#0071e3] hover:underline flex items-center gap-1 font-normal transition-colors"
               >
                 <span>المزيد من {product.brand}</span>
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-4 h-4" />
               </Link>
             </div>
 

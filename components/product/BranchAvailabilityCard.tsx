@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, CheckCircle2, XCircle, Clock, AlertTriangle } from 'lucide-react';
+import { MapPin, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 import { PublicBranchAllocation } from '@/types/catalog';
 import { evaluateFreshness } from '@/lib/catalog/cache';
 
@@ -15,13 +15,13 @@ export function BranchAvailabilityCard({
   const freshness = evaluateFreshness(lastInventorySync);
 
   return (
-    <div className="p-6 rounded-3xl bg-[#0F0F0F] border border-neutral-800/90 space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
-        <h4 className="text-sm font-bold text-white flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-[#D6AC63]" />
-          <span>توافر الجهاز في فروعنا</span>
+    <div className="p-6 rounded-[24px] bg-[#161617] border border-white/[0.08] space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+        <h4 className="text-sm font-semibold text-[#f5f5f7] flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-[#0071e3]" />
+          <span>الاستلام المباشر من المتاجر</span>
         </h4>
-        <span className="text-[11px] font-mono text-neutral-400">تسليم ومعاينة فورية</span>
+        <span className="text-[11px] text-[#86868b]">فحص وتجربة فورية</span>
       </div>
 
       {/* Branches List */}
@@ -32,23 +32,23 @@ export function BranchAvailabilityCard({
             return (
               <div
                 key={branch.branchId}
-                className="flex items-center justify-between p-3 rounded-2xl bg-neutral-900/60 border border-neutral-800/60 text-xs"
+                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#1d1d1f] border border-white/[0.05] text-xs transition-colors hover:border-white/[0.12]"
               >
                 <div className="space-y-0.5">
-                  <span className="font-bold text-neutral-200 block">
+                  <span className="font-medium text-[#f5f5f7] block">
                     {branch.branchNameAr || branch.branchName}
                   </span>
-                  <span className="text-[11px] text-neutral-500">معاينة مباشرة في المتجر</span>
+                  <span className="text-[11px] text-[#86868b]">استلام فوري متاح اليوم</span>
                 </div>
 
                 <div className="flex items-center gap-1.5">
                   {isAvailable ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-900/40 font-semibold">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      متوفر في الفرع
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      متوفر في المتجر
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-950 text-neutral-500 border border-neutral-800">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/[0.04] text-[#86868b] border border-white/[0.06] text-[11px]">
                       <XCircle className="w-3.5 h-3.5" />
                       غير متوفر
                     </span>
@@ -58,16 +58,16 @@ export function BranchAvailabilityCard({
             );
           })
         ) : (
-          <div className="p-4 text-center text-xs text-neutral-400 rounded-2xl bg-neutral-900/40 border border-neutral-800">
-            تواصل مع خدمة العملاء لتحديد أقرب فرع يتوفر به الجهاز.
+          <div className="p-4 text-center text-xs text-[#86868b] rounded-2xl bg-[#1d1d1f] border border-white/[0.05]">
+            تواصل مع خدمة المبيعات لتحديد أقرب فرع متوفر به الموديل المطلوب.
           </div>
         )}
       </div>
 
       {/* Freshness / Stale Warning Notice */}
       {freshness.isStale && (
-        <div className="p-3 rounded-2xl bg-amber-950/20 border border-amber-900/40 flex items-start gap-2.5 text-xs text-amber-300">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-400" />
+        <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2.5 text-xs text-amber-300">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-400" />
           <p className="leading-relaxed">
             {freshness.freshnessNoteAr || 'يُرجى تأكيد توفر الكميات والألوان عبر الواتساب قبل التوجه للفرع.'}
           </p>

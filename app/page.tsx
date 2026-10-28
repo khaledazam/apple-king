@@ -12,7 +12,7 @@ import {
   getPublishedProducts,
   getCatalogBrands,
 } from '@/lib/catalog/queries';
-import { ArrowLeft, Sparkles, Smartphone, Headphones } from 'lucide-react';
+import { ChevronLeft, Sparkles, Smartphone, Headphones } from 'lucide-react';
 
 export const revalidate = 60; // ISR cache revalidation every 60 seconds
 
@@ -40,36 +40,36 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="space-y-0">
-      {/* 7.1 Cinematic iPhone 18 Pro Max Hero */}
+    <div className="space-y-0 bg-[#000000]">
+      {/* 1. Keynote Hero Section */}
       <HeroSection />
 
-      {/* 7.2 Brand Value Proposition */}
+      {/* 2. Apple Difference Value Proposition */}
       <ValueProposition />
 
-      {/* 7.3 Shop by Category */}
+      {/* 3. Category Showcase */}
       <CategoryShowcase />
 
-      {/* 7.4 Featured Products Section */}
+      {/* 4. Curated Featured Products */}
       {featuredProducts.length > 0 && (
-        <section className="py-20 bg-[#080808]">
+        <section className="py-24 bg-[#000000]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-[#D6AC63] uppercase tracking-widest font-mono flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  CURATED SELECTION
+                <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#0071e3]" />
+                  المجموعة المختارة
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
-                  المنتجات المميزة والموصى بها
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#f5f5f7] mt-1.5">
+                  الموديلات الأكثر طلباً
                 </h2>
               </div>
               <Link
                 href="/products?featured=true"
-                className="inline-flex items-center gap-1.5 text-xs text-[#D6AC63] hover:text-[#F1D49A] font-semibold transition-colors"
+                className="inline-flex items-center gap-1 text-sm text-[#0071e3] hover:underline font-normal transition-colors"
               >
-                <span>عرض جميع المنتجات المميزة</span>
-                <ArrowLeft className="w-4 h-4" />
+                <span>عرض جميع الموديلات المميزة</span>
+                <ChevronLeft className="w-4 h-4" />
               </Link>
             </div>
 
@@ -82,26 +82,26 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 7.5 Latest Flagship Phones */}
+      {/* 5. Latest Flagship Phones */}
       {latestPhones.length > 0 && (
-        <section className="py-20 bg-[#050505]">
+        <section className="py-24 bg-[#000000] border-t border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-[#D6AC63] uppercase tracking-widest font-mono flex items-center gap-1.5">
-                  <Smartphone className="w-3.5 h-3.5" />
-                  LATEST ARRIVALS
+                <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Smartphone className="w-3.5 h-3.5 text-[#0071e3]" />
+                  أحدث الإصدارات
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#f5f5f7] mt-1.5">
                   أحدث الهواتف الذكية المعتمدة
                 </h2>
               </div>
               <Link
                 href="/products?productType=phone"
-                className="inline-flex items-center gap-1.5 text-xs text-[#D6AC63] hover:text-[#F1D49A] font-semibold transition-colors"
+                className="inline-flex items-center gap-1 text-sm text-[#0071e3] hover:underline font-normal transition-colors"
               >
                 <span>تصفح جميع الهواتف</span>
-                <ArrowLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" />
               </Link>
             </div>
 
@@ -114,32 +114,32 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 7.6 Premium Promotional Banner */}
+      {/* 6. Apple Trade In Billboard */}
       <PromoBanner />
 
-      {/* 7.7 Popular Brands Showcase */}
+      {/* 7. Brands Directory */}
       <BrandShowcase brands={brands} />
 
-      {/* 7.8 Accessories Showcase */}
+      {/* 8. Original Accessories */}
       {latestAccessories.length > 0 && (
-        <section className="py-20 bg-[#050505]">
+        <section className="py-24 bg-[#000000] border-t border-white/[0.06]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono flex items-center gap-1.5">
-                  <Headphones className="w-3.5 h-3.5" />
-                  ORIGINAL ACCESSORIES
+                <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Headphones className="w-3.5 h-3.5 text-[#0071e3]" />
+                  إكسسوارات معتمدة
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
-                  الإكسسوارات والشواحن الأصلية
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#f5f5f7] mt-1.5">
+                  ملحقات وشواحن أصلية
                 </h2>
               </div>
               <Link
                 href="/products?productType=accessory"
-                className="inline-flex items-center gap-1.5 text-xs text-[#D6AC63] hover:text-[#F1D49A] font-semibold transition-colors"
+                className="inline-flex items-center gap-1 text-sm text-[#0071e3] hover:underline font-normal transition-colors"
               >
                 <span>عرض جميع الإكسسوارات</span>
-                <ArrowLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" />
               </Link>
             </div>
 
@@ -152,7 +152,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 7.9 WhatsApp Direct Consultation */}
+      {/* 9. Specialist Consultation */}
       <WhatsAppSection />
     </div>
   );

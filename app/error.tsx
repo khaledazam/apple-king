@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { AlertCircle, RefreshCw, Home } from 'lucide-react';
 
 export default function ErrorPage({
   error,
@@ -12,16 +12,16 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4 py-20 text-center">
+    <div className="min-h-[70vh] flex items-center justify-center px-4 py-20 text-center bg-[#000000]">
       <div className="max-w-md mx-auto space-y-6">
-        <div className="w-16 h-16 rounded-3xl bg-rose-950/40 border border-rose-900/60 flex items-center justify-center text-rose-400 mx-auto">
-          <AlertTriangle className="w-8 h-8" />
+        <div className="w-16 h-16 rounded-full bg-[#161617] border border-white/[0.08] flex items-center justify-center text-amber-400 mx-auto">
+          <AlertCircle className="w-8 h-8" />
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-white">حدث خطأ أثناء تحميل البيانات</h1>
-          <p className="text-xs text-neutral-400 leading-relaxed">
-            تعذر الاتصال بقاعدة البيانات أو تم إدخال معلمات غير صحيحة. لا تقلق، يمكنك المحاولة مرة أخرى أو العودة للرئيسية.
+          <h1 className="text-2xl font-semibold text-[#f5f5f7] tracking-tight">تعذر تحميل المحتوى</h1>
+          <p className="text-xs text-[#86868b] leading-relaxed">
+            حدث خطأ غير متوقع أثناء استرجاع بيانات الكتالوج. يمكنك إعادة المحاولة الآن أو الرجوع للصفحة الرئيسية.
           </p>
         </div>
 
@@ -29,7 +29,7 @@ export default function ErrorPage({
           <button
             type="button"
             onClick={() => reset()}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#D6AC63] text-black font-bold text-xs hover:bg-[#F1D49A] transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             <span>إعادة المحاولة</span>
@@ -37,10 +37,10 @@ export default function ErrorPage({
 
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-neutral-900 border border-neutral-800 text-white font-bold text-xs hover:bg-neutral-800 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1d1d1f] hover:bg-[#2d2d2f] border border-white/[0.08] text-[#f5f5f7] font-medium text-xs transition-colors"
           >
             <Home className="w-4 h-4" />
-            <span>الرئيسية</span>
+            <span>الصفحة الرئيسية</span>
           </Link>
         </div>
       </div>

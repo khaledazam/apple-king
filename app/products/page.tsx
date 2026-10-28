@@ -43,21 +43,21 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   };
 
   return (
-    <div className="bg-[#050505] min-h-screen py-10">
+    <div className="bg-[#000000] min-h-screen py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Page Top Heading & Breadcrumb */}
-        <div className="space-y-2 border-b border-neutral-800 pb-6">
-          <div className="flex items-center gap-2 text-xs text-neutral-400">
+        <div className="space-y-2 border-b border-white/[0.08] pb-6">
+          <div className="flex items-center gap-2 text-xs text-[#86868b]">
             <Link href="/" className="hover:text-white transition-colors">
               الرئيسية
             </Link>
             <span>/</span>
-            <span className="text-[#F1D49A] font-semibold">كتالوج المنتجات</span>
+            <span className="text-[#f5f5f7] font-medium">كتالوج المنتجات</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-[#f5f5f7] tracking-tight">
             الهواتف الذكية والإكسسوارات المعتمدة
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl">
+          <p className="text-xs sm:text-sm text-[#86868b] max-w-2xl">
             استعرض التشكيلة الكاملة المتوفرة في فروعنا مع إمكانية الفلترة الدقيقة حسب السعر، العلامة التجارية،
             والمساحة التخزينية.
           </p>

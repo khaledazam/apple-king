@@ -47,8 +47,8 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
 
   return (
     <div className="relative">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        {/* Left Column in RTL: Gallery & Branch Availability */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        {/* Gallery & Store Availability Column */}
         <div className="lg:col-span-6 space-y-6">
           <ProductGallery
             images={product.images}
@@ -63,7 +63,7 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
           />
         </div>
 
-        {/* Right Column in RTL: Product Info & Variant Controls */}
+        {/* Product Info & Apple Store Buy Flow Controls */}
         <div className="lg:col-span-6">
           <ProductInformation
             product={product}
@@ -73,11 +73,11 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
         </div>
       </div>
 
-      {/* Sticky Mobile WhatsApp Inquiry Bar */}
-      <div className="lg:hidden fixed bottom-0 right-0 left-0 z-40 bg-[#0A0A0A]/95 backdrop-blur-xl border-t border-neutral-800 p-3 px-4 flex items-center justify-between gap-3 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+      {/* Sticky Mobile Apple Action Bar */}
+      <div className="lg:hidden fixed bottom-0 right-0 left-0 z-40 bg-black/85 backdrop-blur-xl border-t border-white/[0.08] p-3 px-4 flex items-center justify-between gap-4 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
         <div className="space-y-0.5">
-          <span className="text-[10px] text-neutral-400 block">السعر المعتمد</span>
-          <div className="text-sm font-black font-mono text-white">
+          <span className="text-[10px] text-[#86868b] block">السعر المعتمد</span>
+          <div className="text-sm font-semibold text-[#f5f5f7]">
             {product.requiresPriceConfirmation ? (
               <span className="text-amber-400 text-xs flex items-center gap-1">
                 <ShieldAlert className="w-3.5 h-3.5" />
@@ -93,15 +93,21 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
           </div>
         </div>
 
-        <a
-          href={stickyWhatsAppUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 min-h-[44px] flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs shadow-lg shadow-emerald-900/30"
-        >
-          <MessageCircle className="w-4 h-4 flex-shrink-0" />
-          <span>استفسر عبر واتساب</span>
-        </a>
+        {isOutOfStock ? (
+          <div className="flex-1 min-h-[44px] flex items-center justify-center py-2.5 px-4 rounded-full bg-white/[0.05] border border-white/[0.1] text-[#86868b] text-xs font-normal">
+            غير متوفر حالياً
+          </div>
+        ) : (
+          <a
+            href={stickyWhatsAppUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 min-h-[44px] flex items-center justify-center gap-2 py-2.5 px-5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs shadow-md transition-colors"
+          >
+            <MessageCircle className="w-4 h-4 flex-shrink-0" />
+            <span>طلب وحجز عبر واتساب</span>
+          </a>
+        )}
       </div>
     </div>
   );

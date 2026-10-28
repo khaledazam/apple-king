@@ -1,42 +1,44 @@
 import React from 'react';
-import { MessageCircle, Clock, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { MessageCircle, Clock, CheckCircle2, ShieldCheck, UserCheck } from 'lucide-react';
 import { sanitizeWhatsAppNumber } from '@/lib/whatsapp';
 
 export function WhatsAppSection() {
   const whatsappNumber = sanitizeWhatsAppNumber();
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    'مرحبًا، أود الاستفسار عن تفاصيل الأجهزة المتاحة وحجز موعد استلام من فروعكم.'
+    'مرحبًا، أود التحدث مع أحد متخصصي المبيعات للاستفسار عن مواصفات الأجهزة وتأكيد التوافر في الفروع.'
   )}`;
 
   return (
-    <section className="py-20 bg-[#050505] relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
-        <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto shadow-xl shadow-emerald-900/20">
-          <MessageCircle className="w-8 h-8" />
+    <section className="py-24 bg-[#000000] border-t border-white/[0.06] relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 relative z-10">
+        <div className="w-16 h-16 rounded-full bg-[#161617] border border-white/[0.1] flex items-center justify-center text-[#f5f5f7] mx-auto shadow-xl">
+          <UserCheck className="w-8 h-8 text-[#0071e3]" />
         </div>
 
         <div className="space-y-3 max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            تواصل مباشرة مع فريق مبيعات <span className="gold-gradient-text">APPLE KING</span>
+          <span className="text-xs font-semibold text-[#86868b] tracking-wider uppercase">
+            خدمة استشارات الشراء
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-semibold text-[#f5f5f7] tracking-tight">
+            تسوّق مع أحد متخصصي Apple King
           </h2>
-          <p className="text-sm text-neutral-400 leading-relaxed">
-            نسعد بخدمتكم وتوفير استشارات شراء دقيقة على مدار الساعة. تواصل معنا لمعرفة حالة التوافر، حجز جهاز،
-            أو الاستفسار عن أسعار اليوم.
+          <p className="text-sm text-[#86868b] leading-relaxed">
+            هل تحتاج إلى مساعدة في اختيار السعة المناسبة أو مقارنة الموديلات؟ فريقنا المتخصص جاهز للإجابة عن جميع استفساراتك وتأكيد التوافر الفوري.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-neutral-400 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-[#86868b] pt-2">
           <div className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-[#D6AC63]" />
-            <span>رد سريع خلال دقائق</span>
+            <Clock className="w-4 h-4 text-[#0071e3]" />
+            <span>رد سريع على استفساراتك</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>تأكيد فوري لحالة المخزون</span>
+            <span>تأكيد فوري للكميات بالمتاجر</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-blue-400" />
-            <span>تسليم واستلام بالفروع</span>
+            <ShieldCheck className="w-4 h-4 text-[#86868b]" />
+            <span>معاينة واستلام رسمي</span>
           </div>
         </div>
 
@@ -45,10 +47,10 @@ export function WhatsAppSection() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-xl shadow-emerald-950 transition-all duration-300 hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-sm shadow-lg transition-all duration-200"
           >
             <MessageCircle className="w-5 h-5" />
-            <span>ابدأ المحادثة عبر واتساب الآن</span>
+            <span>تحدث مع متخصص الآن عبر واتساب</span>
           </a>
         </div>
       </div>

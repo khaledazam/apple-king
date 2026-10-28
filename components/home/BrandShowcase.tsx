@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { CatalogBrandItem } from '@/types/catalog';
-import { ArrowLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 
 interface BrandShowcaseProps {
   brands?: CatalogBrandItem[];
@@ -20,23 +20,23 @@ export function BrandShowcase({ brands = [] }: BrandShowcaseProps) {
         ];
 
   return (
-    <section className="py-16 bg-[#080808] border-t border-neutral-900">
+    <section className="py-20 bg-[#000000] border-t border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-xs font-bold text-[#D6AC63] uppercase tracking-widest font-mono">
-              OFFICIAL BRANDS
+            <span className="text-xs font-medium text-[#86868b] uppercase tracking-wider font-mono">
+              العلامات المعتمدة
             </span>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mt-1">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#f5f5f7] mt-1">
               العلامات التجارية في الكتالوج
             </h2>
           </div>
           <Link
             href="/products"
-            className="text-xs text-[#D6AC63] hover:text-[#F1D49A] flex items-center gap-1 font-semibold"
+            className="text-sm text-[#0071e3] hover:underline flex items-center gap-1 font-normal transition-colors"
           >
             <span>كل العلامات</span>
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ChevronLeft className="w-4 h-4" />
           </Link>
         </div>
 
@@ -45,12 +45,12 @@ export function BrandShowcase({ brands = [] }: BrandShowcaseProps) {
             <Link
               key={b.name}
               href={`/products?brand=${encodeURIComponent(b.name)}`}
-              className="p-6 rounded-2xl bg-[#121212] border border-neutral-800/80 hover:border-[#D6AC63]/50 transition-all text-center space-y-2 group"
+              className="p-6 rounded-[20px] bg-[#161617] border border-white/[0.08] hover:border-white/[0.2] transition-all text-center space-y-1.5 group"
             >
-              <span className="text-xl font-black text-neutral-200 group-hover:text-[#F1D49A] font-mono transition-colors block">
+              <span className="text-xl font-semibold text-[#f5f5f7] group-hover:text-white transition-colors block">
                 {b.name}
               </span>
-              <span className="text-xs text-neutral-500 font-medium block">
+              <span className="text-xs text-[#86868b] font-normal block">
                 {b.productCount > 0 ? `${b.productCount} منتج متاح` : 'منتجات أصلية'}
               </span>
             </Link>
