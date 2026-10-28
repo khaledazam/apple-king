@@ -1,0 +1,15 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="#050505" />
+  <path d="M6 22L9 11L14 18L16 9L18 18L23 11L26 22H6Z" fill="url(#crownGold)" />
+  <circle cx="9" cy="10" r="1.5" fill="#F1D49A" />
+  <circle cx="16" cy="8" r="1.8" fill="#F1D49A" />
+  <circle cx="23" cy="10" r="1.5" fill="#F1D49A" />
+  <rect x="6" y="24" width="20" height="2" rx="1" fill="url(#crownGold)" />
+  <defs>
+    <linearGradient id="crownGold" x1="6" y1="8" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1D49A" />
+      <stop offset="0.5" stop-color="#D6AC63" />
+      <stop offset="1" stop-color="#B38938" />
+    </linearGradient>
+  </defs>
+</svg>

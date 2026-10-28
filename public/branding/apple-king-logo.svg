@@ -1,0 +1,21 @@
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minimalist Luxury Gold Crown -->
+  <path d="M12 38L18 20L28 32L38 16L48 32L58 20L64 38H12Z" fill="url(#goldGradient)" />
+  <circle cx="18" cy="18" r="2.5" fill="#F1D49A" />
+  <circle cx="38" cy="14" r="3" fill="#F1D49A" />
+  <circle cx="58" cy="18" r="2.5" fill="#F1D49A" />
+  <rect x="12" y="41" width="52" height="3" rx="1.5" fill="url(#goldGradient)" />
+
+  <!-- APPLE KING Typography -->
+  <text x="76" y="32" fill="#F8F8F8" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="900" letter-spacing="2">APPLE KING</text>
+  <text x="77" y="47" fill="#D6AC63" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" letter-spacing="1">ORIGINAL PHONES &amp; ACCESSORIES</text>
+
+  <!-- Gold Gradient Definition -->
+  <defs>
+    <linearGradient id="goldGradient" x1="12" y1="16" x2="64" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1D49A" />
+      <stop offset="0.5" stop-color="#D6AC63" />
+      <stop offset="1" stop-color="#B38938" />
+    </linearGradient>
+  </defs>
+</svg>

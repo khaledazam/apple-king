@@ -1,0 +1,27 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Next.js build output
+/.next/
+/out/
+
+# Production
+/build
+
+# Local environment files (STRICTLY FORBIDDEN FROM VERSION CONTROL)
+.env
+.env*.local
+.env.local
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Playwright & automated test outputs
+/test-results
+/public/qa/screenshots
