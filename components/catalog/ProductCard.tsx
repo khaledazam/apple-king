@@ -1,7 +1,8 @@
+import { InteractiveSurface } from '@/components/ui/MotionPrimitives';
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ChevronLeft, MessageCircle } from 'lucide-react';
+import Image from '@/components/ui/CatalogImage';
+import { ChevronLeft, MessageCircle, Smartphone } from 'lucide-react';
 import { PublicCatalogProduct } from '@/types/catalog';
 import { buildWhatsAppInquiryUrl } from '@/lib/whatsapp';
 
@@ -25,13 +26,11 @@ export function ProductCard({ product, featured = false }: ProductCardProps) {
   const imageSrc =
     product.coverImage ||
     (product.images && product.images.length > 0 ? product.images[0] : null) ||
-    '/branding/iphone-18-hero.jpg';
+    null;
 
   // Build product inquiry WhatsApp URL
-  const productUrl =
-    typeof window !== 'undefined'
-      ? `${window.location.origin}/products/${product.slug}`
-      : `https://store.mobilix.eg/products/${product.slug}`;
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://store.mobilix.eg').replace(/\/+$/, '');
+  const productUrl = `${appUrl}/products/${product.slug}`;
 
   const inquiryUrl = buildWhatsAppInquiryUrl({
     productName: product.titleAr || product.title,
@@ -59,94 +58,21 @@ export function ProductCard({ product, featured = false }: ProductCardProps) {
     return '#86868b';
   };
 
+  const storageOptions = Array.from(new Set(product.variants?.map(v => v.storage).filter(Boolean)));
+  const condition = product.variants?.every(v => v.condition === 'used') && product.variants.length ? 'مستعمل' : product.variants?.every(v => v.condition === 'new') && product.variants.length ? 'جديد' : null;
   return (
-    <div className="group relative rounded-[24px] bg-[#161617] border border-white/[0.08] hover:border-white/[0.2] transition-all duration-300 flex flex-col justify-between overflow-hidden p-6 sm:p-7">
-      {/* Top Header: Eyebrow Tag & Product Name */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-xs text-[#86868b]">
-          <span className="font-medium tracking-wide">{product.brand}</span>
-          {isOutOfStock ? (
-            <span className="text-[#86868b]">غير متوفر حاليًا</span>
-          ) : product.isFeatured ? (
-            <span className="text-[#f5f5f7] font-medium">مميز</span>
-          ) : (
-            <span className="text-[#2997ff]">متوفر بالفرع</span>
-          )}
-        </div>
-
-        <Link href={`/products/${product.slug}`} className="block">
-          <h3 className="text-xl sm:text-2xl font-semibold text-[#f5f5f7] tracking-tight group-hover:text-white transition-colors">
-            {product.titleAr || product.title}
-          </h3>
-        </Link>
-
-        <p className="text-xs text-[#86868b] line-clamp-1">
-          {product.modelName || (product.productType === 'phone' ? 'هاتف ذكي معتمد' : 'إكسسوار أصلي')}
-        </p>
-      </div>
-
-      {/* Center: Device Imagery with Generous Breathing Room */}
-      <div className="my-6 relative aspect-square w-full flex items-center justify-center">
-        <Link href={`/products/${product.slug}`} className="relative w-full h-full block">
-          <Image
-            src={imageSrc}
-            alt={product.titleAr || product.title}
-            fill
-            className="object-contain object-center transform group-hover:scale-[1.03] transition-transform duration-500 ease-out p-4"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
-          />
-        </Link>
-      </div>
-
-      {/* Color Swatch Dots (Official Apple Style) */}
-      {availableColors.length > 0 && (
-        <div className="flex items-center justify-center gap-1.5 pb-4">
-          {availableColors.slice(0, 5).map((color, idx) => (
-            <span
-              key={idx}
-              className="w-3 h-3 rounded-full border border-black/40 shadow-xs"
-              style={{ backgroundColor: getColorHex(color) }}
-              title={color}
-            />
-          ))}
-          {availableColors.length > 5 && (
-            <span className="text-[10px] text-[#86868b] font-mono">+{availableColors.length - 5}</span>
-          )}
-        </div>
-      )}
-
-      {/* Bottom Area: Pricing & Actions */}
-      <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-2">
-        <div>
-          <span className="text-[11px] text-[#86868b] block">يبدأ من</span>
-          <span className="text-base sm:text-lg font-semibold text-[#f5f5f7] tracking-tight">
-            {formatEGP(hasPromo ? (product.promoPrice as number) : product.basePrice)}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {/* Quick WhatsApp Inquiry CTA Button */}
-          <a
-            href={inquiryUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="apple-btn-primary px-3.5 py-1.5 text-xs font-medium gap-1.5"
-            title="حجز عبر واتساب"
-          >
-            <MessageCircle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">حجز</span>
-          </a>
-
-          {/* Product Detail Link */}
-          <Link
-            href={`/products/${product.slug}`}
-            className="w-8 h-8 rounded-full bg-[#1d1d1f] hover:bg-[#2b2b2d] flex items-center justify-center text-[#f5f5f7] transition-colors"
-            title="عرض التفاصيل"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-    </div>
+    <InteractiveSurface>
+    <article className={'shop-product-card' + (featured ? ' shop-product-featured' : '')}>
+      <div className="product-card-labels"><span>{product.brand}</span><span className={isOutOfStock ? 'product-stock-muted' : 'product-stock'}>{isOutOfStock ? 'غير متوفر' : product.isFeatured ? 'اختيار مميز' : 'متوفر'}</span></div>
+      <Link href={'/products/' + product.slug} className="product-card-image" aria-label={'تفاصيل ' + (product.titleAr || product.title)}>
+        {imageSrc ? <Image src={imageSrc} alt={product.titleAr || product.title} fill className="object-contain p-5" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 300px" /> : <div className="product-image-placeholder"><Smartphone size={64} strokeWidth={.8} /><span>الصورة غير متاحة</span></div>}
+      </Link>
+      <div className="product-card-colors">{availableColors.slice(0, 5).map(color => <span key={color} style={{ backgroundColor: getColorHex(color) }} title={color} />)}{availableColors.length > 5 && <small>+{availableColors.length - 5}</small>}</div>
+      <Link href={'/products/' + product.slug}><h3>{product.titleAr || product.title}</h3></Link>
+      <p className="product-card-model">{product.modelName || (product.productType === 'phone' ? 'هاتف ذكي' : 'إكسسوار')}</p>
+      <div className="product-card-specs">{condition && <span>{condition}</span>}{storageOptions.slice(0, 2).map(storage => <span key={storage} dir="auto">{storage}</span>)}</div>
+      <div className="product-card-bottom"><div className="product-card-price"><small>{product.requiresPriceConfirmation ? 'السعر حسب التوافر' : 'يبدأ من'}</small><strong>{product.requiresPriceConfirmation ? 'اسأل عن السعر' : formatEGP(hasPromo ? (product.promoPrice as number) : product.basePrice)}</strong>{hasPromo && <del>{formatEGP(product.basePrice)}</del>}</div><div className="product-card-actions"><Link href={'/products/' + product.slug} className="shop-text-link">التفاصيل <ChevronLeft size={15} /></Link><a href={inquiryUrl} target="_blank" rel="noopener noreferrer" aria-label={'استفسر عن ' + (product.titleAr || product.title) + ' عبر واتساب'} className="product-inquiry"><MessageCircle size={17} /></a></div></div>
+    </article>
+    </InteractiveSurface>
   );
 }

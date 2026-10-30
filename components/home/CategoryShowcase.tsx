@@ -1,95 +1,44 @@
-import React from 'react';
+import { InteractiveSurface } from '@/components/ui/MotionPrimitives';
 import Link from 'next/link';
-import { Smartphone, Headphones, ChevronLeft, Sparkles, Watch } from 'lucide-react';
+import Image from '@/components/ui/CatalogImage';
+import { ChevronLeft, Smartphone, Headphones, Cable, BatteryCharging, Sparkles, SlidersHorizontal } from 'lucide-react';
+import type { PublicCatalogProduct } from '@/types/catalog';
 
-export function CategoryShowcase() {
-  const categories = [
-    {
-      title: 'iPhone',
-      arabicTitle: 'هواتف آبل آيفون',
-      count: 'سلسلة iPhone 16 Pro وPro Max',
-      href: '/products?brand=Apple&productType=phone',
-      icon: Smartphone,
-    },
-    {
-      title: 'Galaxy',
-      arabicTitle: 'هواتف سامسونج جالاكسي',
-      count: 'سلسلة S24 Ultra والأجهزة القابلة للطي',
-      href: '/products?brand=Samsung&productType=phone',
-      icon: Smartphone,
-    },
-    {
-      title: 'Accessories',
-      arabicTitle: 'إكسسوارات وشواحن أصلية',
-      count: 'شواحن MagSafe وكابلات وسماعات معتمدة',
-      href: '/products?productType=accessory',
-      icon: Headphones,
-    },
-    {
-      title: 'Certified Devices',
-      arabicTitle: 'أجهزة مستعملة معتمدة',
-      count: 'كسر زيرو بفحص شامل وضمان معتمد',
-      href: '/products?condition=used',
-      icon: Sparkles,
-    },
-  ];
+const shortcuts = [
+  { title: 'iPhone', href: '/products?brand=Apple&productType=phone', icon: Smartphone },
+  { title: 'Samsung', href: '/products?brand=Samsung&productType=phone', icon: Smartphone },
+  { title: 'سماعات', href: '/products?productType=accessory&category=earphone', icon: Headphones },
+  { title: 'شواحن', href: '/products?productType=accessory&category=charger', icon: Cable },
+  { title: 'باور بانك', href: '/products?productType=accessory&category=power_bank', icon: BatteryCharging },
+  { title: 'أجهزة مستعملة', href: '/products?condition=used', icon: Sparkles },
+];
 
+export function CategoryShowcase({ phones = [] }: { phones?: PublicCatalogProduct[] }) {
+  const samsungImage = phones.find(p => p.brand.toLowerCase() === 'samsung' && (p.coverImage || p.images[0]));
   return (
-    <section className="py-24 bg-[#000000]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <span className="text-xs font-medium text-[#86868b] uppercase tracking-wider font-mono">
-              تصفح الكتالوج
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#f5f5f7] mt-1.5">
-              استكشف حسب الفئة
-            </h2>
-          </div>
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-1 text-sm text-[#0071e3] hover:underline transition-colors font-normal"
-          >
-            <span>عرض جميع المنتجات</span>
-            <ChevronLeft className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {/* Categories Grid - Apple Bento Style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((cat, i) => {
-            const Icon = cat.icon;
-            return (
-              <Link
-                key={i}
-                href={cat.href}
-                className="group relative p-7 rounded-[24px] bg-[#161617] border border-white/[0.08] hover:border-white/[0.18] transition-all duration-300 flex flex-col justify-between min-h-[220px]"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-[#1d1d1f] border border-white/[0.06] flex items-center justify-center text-[#f5f5f7] group-hover:scale-105 transition-transform">
-                    <Icon className="w-5 h-5 text-[#f5f5f7]" />
-                  </div>
-                  <span className="text-xs font-mono text-[#86868b] tracking-wider">
-                    {cat.title}
-                  </span>
-                </div>
-
-                <div className="space-y-1 pt-6">
-                  <h3 className="text-lg font-semibold text-[#f5f5f7] group-hover:text-white transition-colors">
-                    {cat.arabicTitle}
-                  </h3>
-                  <p className="text-xs text-[#86868b] leading-relaxed">{cat.count}</p>
-                </div>
-
-                <div className="pt-4 flex items-center gap-1 text-xs font-normal text-[#0071e3] group-hover:translate-x-[-3px] transition-transform">
-                  <span>استكشف الموديلات</span>
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+    <section id="collections" className="shop-section" aria-labelledby="departments-title">
+      <div className="shop-heading"><div><p className="shop-eyebrow">THE COLLECTIONS</p><h2 id="departments-title">كل اللي بتدور عليه.<span> في مكان واحد.</span></h2></div><Link href="/products" className="shop-text-link">تصفح الكتالوج <ChevronLeft size={16} /></Link></div>
+      <nav className="shop-shortcuts" aria-label="أقسام التسوق">{shortcuts.map(({ title, href, icon: Icon }) => <Link href={href} key={title}><span><Icon size={27} strokeWidth={1.35} aria-hidden="true" /></span><strong>{title}</strong></Link>)}</nav>
+      <div className="department-grid">
+        <InteractiveSurface>
+        <Link href="/products?brand=Apple&productType=phone" className="department-card department-dark">
+          <div className="department-copy"><p className="shop-eyebrow">THE iPHONE EDIT</p><h3>عالم iPhone.</h3><p>من أول تجربة، لآخر تفصيلة.<br />اكتشف الموديل اللي يناسبك.</p><span className="department-action">استكشف iPhone <ChevronLeft size={17} /></span></div>
+          <Image src="/branding/gold-iphone-hero.png" alt="تكوين توضيحي لهواتف بلون ذهبي" fill sizes="(max-width: 760px) 100vw, 50vw" className="department-image" />
+        </Link>
+        </InteractiveSurface>
+        <InteractiveSurface>
+        <Link href="/products?productType=accessory" className="department-card department-cream">
+          <div className="department-copy"><p className="shop-eyebrow">THE EVERYDAY ESSENTIALS</p><h3>كمّل تجربتك.</h3><p>للصوت، للشحن، ولحماية جهازك.<br />تفاصيل صغيرة بتفرق في يومك.</p><span className="department-action">تسوق الإكسسوارات <ChevronLeft size={17} /></span></div>
+          <Image src="/branding/accessories-editorial.png" alt="تكوين توضيحي لسماعات وشاحن وكابل وغطاء هاتف" fill sizes="(max-width: 760px) 100vw, 50vw" className="department-image" />
+        </Link>
+        </InteractiveSurface>
+      </div>
+      <div className="department-bottom">
+        <Link href="/products?brand=Samsung&productType=phone" className="department-mini">
+          {samsungImage ? <Image src={samsungImage.coverImage || samsungImage.images[0]} width={76} height={92} alt="" className="mini-device-image" /> : <Smartphone size={45} strokeWidth={1} aria-hidden="true" />}
+          <div><span>Samsung Galaxy</span><h3>اختيارات أكتر. إمكانيات أوسع.</h3><p>تصفح هواتف سامسونج المتاحة.</p></div><ChevronLeft size={20} />
+        </Link>
+        <Link href="/products" className="department-mini department-mini-warm"><SlidersHorizontal size={36} strokeWidth={1.3} aria-hidden="true" /><div><span>اختيار على مقاسك</span><h3>عارف بتدور على إيه؟</h3><p>حدد العلامة، الحالة، السعة والسعر من الكتالوج.</p></div><ChevronLeft size={20} /></Link>
       </div>
     </section>
   );

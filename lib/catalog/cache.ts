@@ -7,12 +7,13 @@
  * from MongoDB Atlas. This module manages cache policies and provides stale data indicators.
  */
 
+// Publishing and unpublishing in the ERP must take effect on the next request.
 export const CACHE_POLICIES = {
-  LISTING: 'public, s-maxage=60, stale-while-revalidate=300',
-  DETAIL: 'public, s-maxage=30, stale-while-revalidate=120',
-  FEATURED: 'public, s-maxage=60, stale-while-revalidate=300',
-  FILTERS: 'public, s-maxage=300, stale-while-revalidate=600',
-  AVAILABILITY: 'public, s-maxage=10, stale-while-revalidate=30',
+  LISTING: 'no-store, max-age=0',
+  DETAIL: 'no-store, max-age=0',
+  FEATURED: 'no-store, max-age=0',
+  FILTERS: 'no-store, max-age=0',
+  AVAILABILITY: 'no-store, max-age=0',
   HEALTH: 'no-cache, no-store, must-revalidate',
 } as const;
 

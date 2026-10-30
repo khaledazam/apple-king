@@ -15,13 +15,13 @@ export function BranchAvailabilityCard({
   const freshness = evaluateFreshness(lastInventorySync);
 
   return (
-    <div className="p-6 rounded-[24px] bg-[#161617] border border-white/[0.08] space-y-4">
-      <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
-        <h4 className="text-sm font-semibold text-[#f5f5f7] flex items-center gap-2">
+    <div className="p-6 rounded-[24px] bg-white border border-black/[0.08] space-y-4">
+      <div className="flex items-center justify-between pb-3 border-b border-black/[0.06]">
+        <h4 className="text-sm font-semibold text-[#1d1d1f] flex items-center gap-2">
           <MapPin className="w-4 h-4 text-[#0071e3]" />
           <span>الاستلام المباشر من المتاجر</span>
         </h4>
-        <span className="text-[11px] text-[#86868b]">فحص وتجربة فورية</span>
+        <span className="text-[11px] text-[#6e6e73]">فحص وتجربة فورية</span>
       </div>
 
       {/* Branches List */}
@@ -32,13 +32,13 @@ export function BranchAvailabilityCard({
             return (
               <div
                 key={branch.branchId}
-                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#1d1d1f] border border-white/[0.05] text-xs transition-colors hover:border-white/[0.12]"
+                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#f5f5f7] border border-black/[0.05] text-xs transition-colors hover:border-black/[0.12]"
               >
                 <div className="space-y-0.5">
-                  <span className="font-medium text-[#f5f5f7] block">
+                  <span className="font-medium text-[#1d1d1f] block">
                     {branch.branchNameAr || branch.branchName}
                   </span>
-                  <span className="text-[11px] text-[#86868b]">استلام فوري متاح اليوم</span>
+                  <span className="text-[11px] text-[#6e6e73]">استلام فوري متاح اليوم</span>
                 </div>
 
                 <div className="flex items-center gap-1.5">
@@ -48,7 +48,7 @@ export function BranchAvailabilityCard({
                       متوفر في المتجر
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/[0.04] text-[#86868b] border border-white/[0.06] text-[11px]">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/[0.04] text-[#6e6e73] border border-black/[0.06] text-[11px]">
                       <XCircle className="w-3.5 h-3.5" />
                       غير متوفر
                     </span>
@@ -58,7 +58,7 @@ export function BranchAvailabilityCard({
             );
           })
         ) : (
-          <div className="p-4 text-center text-xs text-[#86868b] rounded-2xl bg-[#1d1d1f] border border-white/[0.05]">
+          <div className="p-4 text-center text-xs text-[#6e6e73] rounded-2xl bg-[#f5f5f7] border border-black/[0.05]">
             تواصل مع خدمة المبيعات لتحديد أقرب فرع متوفر به الموديل المطلوب.
           </div>
         )}

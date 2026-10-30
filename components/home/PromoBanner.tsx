@@ -1,55 +1,8 @@
-import React from 'react';
 import Link from 'next/link';
-import { ChevronLeft, MessageCircle } from 'lucide-react';
+import { ArrowLeftRight, ChevronLeft, MessageCircle, Smartphone } from 'lucide-react';
 import { sanitizeWhatsAppNumber } from '@/lib/whatsapp';
 
 export function PromoBanner() {
-  const whatsappNumber = sanitizeWhatsAppNumber();
-  const promoWhatsAppUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    'مرحبًا، أود الاستفسار عن عروض الاستبدال والأسعار الخاصة المتاحة حاليًا في APPLE KING.'
-  )}`;
-
-  return (
-    <section className="py-16 bg-[#000000]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-[28px] overflow-hidden bg-[#161617] border border-white/[0.08] p-8 sm:p-14">
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="space-y-3.5 max-w-2xl">
-              <span className="text-xs font-semibold text-[#86868b] tracking-wider uppercase">
-                Apple King Trade In • برامج التبديل
-              </span>
-
-              <h2 className="text-2xl sm:text-4xl font-semibold text-[#f5f5f7] tracking-tight leading-tight">
-                استبدل هاتفك الحالي واحصل على رصيد مباشر لشراء أحدث الأجهزة.
-              </h2>
-
-              <p className="text-sm text-[#86868b] leading-relaxed max-w-xl">
-                تقييم فوري وعادل لهاتفك القديم مع إمكانية استلام جهازك الجديد في نفس اللحظة عبر فروعنا المعتمدة.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-3.5 flex-shrink-0 w-full sm:w-auto">
-              <a
-                href={promoWhatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-medium transition-colors"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>احسب قيمة هاتفك</span>
-              </a>
-
-              <Link
-                href="/products?featured=true"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-5 py-3 rounded-full bg-[#1d1d1f] hover:bg-[#2d2d2f] border border-white/[0.08] text-[#f5f5f7] text-xs font-normal transition-colors"
-              >
-                <span>تصفح العروض المميزة</span>
-                <ChevronLeft className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  const inquiry = `https://wa.me/${sanitizeWhatsAppNumber()}?text=${encodeURIComponent('أهلًا، عايز أستفسر عن استبدال هاتفي وتقييم حالته في ملك التفاحه.')}`;
+  return <section className="shop-section trade-section" aria-labelledby="trade-title"><div className="trade-panel"><div className="trade-copy"><p className="shop-eyebrow">ملك التفاحه · الاستبدال</p><h2 id="trade-title">وقت التغيير؟<br /><span>ابدأ باللي معاك.</span></h2><p>اسألنا عن استبدال جهازك، واعرف قيمته بعد الفحص.<br />ونساعدك تختار الخطوة الجاية.</p><a href={inquiry} target="_blank" rel="noopener noreferrer" className="shop-button-gold"><MessageCircle size={18} />اسأل عن الاستبدال</a><small>قيمة الاستبدال وإمكانية قبوله بتتحدد بعد فحص الجهاز في الفرع.</small></div><div className="trade-visual" aria-hidden="true"><div className="trade-phone trade-phone-old"><Smartphone strokeWidth={.75} /></div><span className="trade-arrow"><ArrowLeftRight strokeWidth={1.4} /></span><div className="trade-phone trade-phone-new"><Smartphone strokeWidth={.75} /></div></div></div><Link href="/products?condition=used" className="used-device-strip"><div><span>اختيار ذكي، بقيمة مختلفة.</span><p>استكشف الأجهزة المستعملة، وراجع الحالة والسعة والتوافر قبل ما تقرر.</p></div><strong>تصفح المستعمل <ChevronLeft size={17} /></strong></Link></section>;
 }

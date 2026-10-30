@@ -96,16 +96,16 @@ export function VariantSelector({
   };
 
   return (
-    <div className="space-y-8 pt-6 border-t border-white/[0.08]">
+    <div className="space-y-8 pt-6 border-t border-black/[0.08]">
       {/* 1. Official Apple Finish / Color Selector */}
       {colors.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold text-[#f5f5f7]">
-              اللون. <span className="font-normal text-[#86868b]">اختر المفضل لديك.</span>
+            <h3 className="text-sm font-semibold text-[#1d1d1f]">
+              اللون. <span className="font-normal text-[#6e6e73]">اختر المفضل لديك.</span>
             </h3>
             {currentVariant.color && (
-              <span className="text-xs font-medium text-[#f5f5f7]">{currentVariant.color}</span>
+              <span className="text-xs font-medium text-[#1d1d1f]">{currentVariant.color}</span>
             )}
           </div>
 
@@ -141,8 +141,8 @@ export function VariantSelector({
       {/* 2. Official Apple Storage / Capacity Selector (Segmented Boxes) */}
       {storages.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-[#f5f5f7]">
-            المساحة. <span className="font-normal text-[#86868b]">ما السعة التي تناسبك؟</span>
+          <h3 className="text-sm font-semibold text-[#1d1d1f]">
+            المساحة. <span className="font-normal text-[#6e6e73]">ما السعة التي تناسبك؟</span>
           </h3>
 
           <div className="grid grid-cols-2 gap-3">
@@ -161,14 +161,14 @@ export function VariantSelector({
                   className={`p-4 rounded-2xl text-center transition-all duration-200 border ${
                     isSelected
                       ? 'border-2 border-[#0071e3] bg-[#0071e3]/[0.06]'
-                      : 'border-[#424245] bg-[#161617] hover:border-[#86868b]'
+                      : 'border-[#424245] bg-white hover:border-[#86868b]'
                   }`}
                 >
-                  <span className="block text-lg font-semibold text-[#f5f5f7] tracking-tight">
+                  <span className="block text-lg font-semibold text-[#1d1d1f] tracking-tight">
                     {storage}
                   </span>
                   {vForStorage && (
-                    <span className="block text-xs text-[#86868b] mt-1">
+                    <span className="block text-xs text-[#6e6e73] mt-1">
                       {new Intl.NumberFormat('en-US').format(vForStorage.price)} ج.م
                     </span>
                   )}
@@ -182,8 +182,8 @@ export function VariantSelector({
       {/* 3. Official Apple Condition Selector */}
       {conditions.length > 1 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-[#f5f5f7]">
-            حالة الجهاز. <span className="font-normal text-[#86868b]">اختر الحالة المعتمدة.</span>
+          <h3 className="text-sm font-semibold text-[#1d1d1f]">
+            حالة الجهاز. <span className="font-normal text-[#6e6e73]">اختر الحالة المعتمدة.</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -197,13 +197,13 @@ export function VariantSelector({
                   className={`p-4 rounded-2xl text-right transition-all duration-200 border ${
                     isSelected
                       ? 'border-2 border-[#0071e3] bg-[#0071e3]/[0.06]'
-                      : 'border-[#424245] bg-[#161617] hover:border-[#86868b]'
+                      : 'border-[#424245] bg-white hover:border-[#86868b]'
                   }`}
                 >
-                  <span className="block text-sm font-semibold text-[#f5f5f7]">
+                  <span className="block text-sm font-semibold text-[#1d1d1f]">
                     {cond === 'new' ? 'جديد أصلي بالكرتونة' : 'مستعمل معتمد (كسر زيرو)'}
                   </span>
-                  <span className="block text-xs text-[#86868b] mt-1">
+                  <span className="block text-xs text-[#6e6e73] mt-1">
                     {cond === 'new' ? 'ضمان رسمي كامل معتمد' : 'مفحوص بدقة مع تقرير كفاءة البطارية'}
                   </span>
                 </button>

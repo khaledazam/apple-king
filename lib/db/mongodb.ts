@@ -3,9 +3,9 @@
  *
  * Security & Isolation Guarantees:
  * 1. Connects strictly to MongoDB Atlas using `STOREFRONT_MONGODB_URI`.
- * 2. Scoped strictly to the catalog collection: `storefrontproducts`.
+ * 2. Catalog documents are read from `storefrontproducts`; the media route reads only the catalogimages GridFS bucket.
  * 3. Enforces read-only collection isolation.
- * 4. Never connects to local ERP backend or internal ERP collections.
+ * 4. Never connects to the local ERP backend or internal inventory collections.
  * 5. Uses connection pooling and caches the client across Next.js reloads.
  */
 

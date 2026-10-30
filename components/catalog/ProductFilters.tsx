@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Filter, RotateCcw } from 'lucide-react';
+import { ACCESSORY_DEPARTMENTS } from '@/lib/catalog/categories';
 import { CatalogFilterOptions } from '@/types/catalog';
 
 interface ProductFiltersProps {
@@ -14,6 +15,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
   const searchParams = useSearchParams();
 
   // Active filter values from URL
+  const activeCategory = searchParams.get('category') || '';
   const activeBrand = searchParams.get('brand') || '';
   const activeType = searchParams.get('productType') || '';
   const activeCondition = searchParams.get('condition') || '';
@@ -29,6 +31,12 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
     } else {
       params.delete(key);
     }
+    if (key === 'category' && value) params.set('productType', 'accessory');
+    if (key === 'productType') params.delete('category');
+    if (key === 'category' || (key === 'productType' && value === 'accessory')) {
+      params.delete('condition');
+      params.delete('storage');
+    }
     params.set('page', '1'); // Reset to page 1 on filter change
     router.push(`/products?${params.toString()}`);
   };
@@ -39,6 +47,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
   };
 
   const hasActiveFilters = Boolean(
+    activeCategory ||
     activeBrand ||
     activeType ||
     activeCondition ||
@@ -48,18 +57,18 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
   );
 
   return (
-    <aside className="p-6 rounded-[24px] bg-[#161617] border border-white/[0.08] space-y-6">
+    <aside className="p-6 rounded-[24px] bg-white border border-black/[0.08] space-y-6">
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between pb-4 border-b border-black/[0.06]">
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-[#0071e3]" />
-          <h3 className="text-sm font-semibold text-[#f5f5f7]">تصفية النتائج</h3>
+          <h3 className="text-sm font-semibold text-[#1d1d1f]">تصفية النتائج</h3>
         </div>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearAllFilters}
-            className="text-[11px] text-[#86868b] hover:text-[#0071e3] flex items-center gap-1 transition-colors"
+            className="text-[11px] text-[#6e6e73] hover:text-[#0071e3] flex items-center gap-1 transition-colors"
           >
             <RotateCcw className="w-3 h-3" />
             <span>إعادة ضبط</span>
@@ -69,7 +78,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
 
       {/* 1. Availability Status */}
       <div className="space-y-2.5">
-        <label className="text-xs font-semibold text-[#86868b]">حالة التوافر</label>
+        <label className="text-xs font-semibold text-[#6e6e73]">حالة التوافر</label>
         <div className="flex flex-wrap gap-1.5">
           {[
             { label: 'الكل', value: 'all' },
@@ -83,7 +92,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 activeAvailability === item.value
                   ? 'bg-[#0071e3] text-white shadow-sm'
-                  : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                  : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
               }`}
             >
               {item.label}
@@ -93,8 +102,8 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
       </div>
 
       {/* 2. Product Type */}
-      <div className="space-y-2.5 pt-4 border-t border-white/[0.06]">
-        <label className="text-xs font-semibold text-[#86868b]">نوع المنتج</label>
+      <div className="space-y-2.5 pt-4 border-t border-black/[0.06]">
+        <label className="text-xs font-semibold text-[#6e6e73]">نوع المنتج</label>
         <div className="flex flex-wrap gap-1.5">
           {[
             { label: 'الكل', value: '' },
@@ -108,7 +117,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 activeType === item.value
                   ? 'bg-[#0071e3] text-white shadow-sm'
-                  : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                  : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
               }`}
             >
               {item.label}
@@ -117,10 +126,25 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
         </div>
       </div>
 
+      {activeType !== 'phone' && (
+        <div className="space-y-2.5 pt-4 border-t border-black/[0.06]">
+          <h4 className="text-xs font-semibold text-[#6e6e73]">أقسام الإكسسوارات</h4>
+          <div className="flex flex-wrap gap-1.5">
+            {[{ value: '', label: 'كل الأقسام' }, ...ACCESSORY_DEPARTMENTS].map(item => (
+              <button key={item.value} type="button" aria-pressed={activeCategory === item.value}
+                onClick={() => updateFilter('category', item.value || null)}
+                className={`px-3 py-2 rounded-full text-xs transition-colors border ${activeCategory === item.value ? 'bg-[#1d1d1f] text-white border-[#1d1d1f]' : 'bg-[#f5f5f7] text-[#6e6e73] border-black/[0.06] hover:text-[#1d1d1f]'}`}>
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 3. Brands List */}
       {filterOptions?.brands && filterOptions.brands.length > 0 && (
-        <div className="space-y-2.5 pt-4 border-t border-white/[0.06]">
-          <label className="text-xs font-semibold text-[#86868b]">العلامة التجارية</label>
+        <div className="space-y-2.5 pt-4 border-t border-black/[0.06]">
+          <label className="text-xs font-semibold text-[#6e6e73]">العلامة التجارية</label>
           <div className="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto no-scrollbar">
             <button
               type="button"
@@ -128,7 +152,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 !activeBrand
                   ? 'bg-[#0071e3] text-white'
-                  : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                  : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
               }`}
             >
               الكل
@@ -141,7 +165,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   activeBrand === b
                     ? 'bg-[#0071e3] text-white'
-                    : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                    : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
                 }`}
               >
                 {b}
@@ -152,8 +176,8 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
       )}
 
       {/* 4. Condition Filter */}
-      <div className="space-y-2.5 pt-4 border-t border-white/[0.06]">
-        <label className="text-xs font-semibold text-[#86868b]">حالة الجهاز</label>
+      {activeType !== 'accessory' && (<div className="space-y-2.5 pt-4 border-t border-black/[0.06]">
+        <label className="text-xs font-semibold text-[#6e6e73]">حالة الجهاز</label>
         <div className="flex flex-wrap gap-1.5">
           {[
             { label: 'الكل', value: '' },
@@ -167,19 +191,19 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 activeCondition === item.value
                   ? 'bg-[#0071e3] text-white'
-                  : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                  : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
               }`}
             >
               {item.label}
             </button>
           ))}
         </div>
-      </div>
+      </div>)}
 
       {/* 5. Storage Options */}
-      {filterOptions?.storageOptions && filterOptions.storageOptions.length > 0 && (
-        <div className="space-y-2.5 pt-4 border-t border-white/[0.06]">
-          <label className="text-xs font-semibold text-[#86868b]">المساحة التخزينية</label>
+      {activeType !== 'accessory' && filterOptions?.storageOptions && filterOptions.storageOptions.length > 0 && (
+        <div className="space-y-2.5 pt-4 border-t border-black/[0.06]">
+          <label className="text-xs font-semibold text-[#6e6e73]">المساحة التخزينية</label>
           <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
@@ -187,7 +211,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
               className={`px-3 py-1 rounded-full text-xs font-mono font-medium transition-all ${
                 !activeStorage
                   ? 'bg-[#0071e3] text-white'
-                  : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                  : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
               }`}
             >
               الكل
@@ -200,7 +224,7 @@ export function ProductFilters({ filterOptions }: ProductFiltersProps) {
                 className={`px-3 py-1 rounded-full text-xs font-mono font-medium transition-all ${
                   activeStorage === s
                     ? 'bg-[#0071e3] text-white'
-                    : 'bg-[#1d1d1f] text-[#86868b] hover:text-[#f5f5f7] border border-white/[0.06]'
+                    : 'bg-[#f5f5f7] text-[#6e6e73] hover:text-[#1d1d1f] border border-black/[0.06]'
                 }`}
               >
                 {s}

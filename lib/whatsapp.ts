@@ -19,7 +19,7 @@ export interface WhatsAppInquiryParams {
  * Validates and cleans a phone number string (digits only, e.g., 201012345678).
  */
 export function sanitizeWhatsAppNumber(rawNumber?: string): string {
-  const defaultNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '201000000000';
+  const defaultNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '201097976407';
   const target = rawNumber || defaultNumber;
   return target.replace(/\D/g, '');
 }

@@ -74,10 +74,10 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
       </div>
 
       {/* Sticky Mobile Apple Action Bar */}
-      <div className="lg:hidden fixed bottom-0 right-0 left-0 z-40 bg-black/85 backdrop-blur-xl border-t border-white/[0.08] p-3 px-4 flex items-center justify-between gap-4 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+      <div className="lg:hidden fixed bottom-0 right-0 left-0 z-40 bg-white/95 backdrop-blur-xl border-t border-black/[0.08] p-3 px-4 flex items-center justify-between gap-4 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
         <div className="space-y-0.5">
-          <span className="text-[10px] text-[#86868b] block">السعر المعتمد</span>
-          <div className="text-sm font-semibold text-[#f5f5f7]">
+          <span className="text-[10px] text-[#6e6e73] block">السعر المعتمد</span>
+          <div className="text-sm font-semibold text-[#1d1d1f]">
             {product.requiresPriceConfirmation ? (
               <span className="text-amber-400 text-xs flex items-center gap-1">
                 <ShieldAlert className="w-3.5 h-3.5" />
@@ -94,7 +94,7 @@ export function ProductDetailComposition({ product }: ProductDetailCompositionPr
         </div>
 
         {isOutOfStock ? (
-          <div className="flex-1 min-h-[44px] flex items-center justify-center py-2.5 px-4 rounded-full bg-white/[0.05] border border-white/[0.1] text-[#86868b] text-xs font-normal">
+          <div className="flex-1 min-h-[44px] flex items-center justify-center py-2.5 px-4 rounded-full bg-black/[0.03] border border-black/[0.1] text-[#6e6e73] text-xs font-normal">
             غير متوفر حالياً
           </div>
         ) : (

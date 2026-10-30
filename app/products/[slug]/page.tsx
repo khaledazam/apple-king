@@ -7,6 +7,8 @@ import { ProductCard } from '@/components/catalog/ProductCard';
 import { getProductBySlug, getProductAvailability, getPublishedProducts } from '@/lib/catalog/queries';
 import { ArrowLeft, Sparkles, ShieldCheck } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 interface ProductDetailPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -17,16 +19,16 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
 
   if (!product) {
     return {
-      title: 'المنتج غير موجود | APPLE KING',
+      title: 'المنتج غير موجود | ملك التفاحه',
       description: 'المنتج المطلوب غير متاح حاليًا في الكتالوج العام.',
     };
   }
 
-  const title = product.seo?.title || `${product.titleAr || product.title} | APPLE KING`;
+  const title = product.seo?.title || `${product.titleAr || product.title} | ملك التفاحه`;
   const description =
     product.seo?.description ||
     product.descriptionAr ||
-    `اشتري ${product.titleAr || product.title} بأفضل سعر كاش معتمد في مصر من فروع APPLE KING.`;
+    `اشتري ${product.titleAr || product.title} بأفضل سعر كاش معتمد في مصر من فروع ملك التفاحه.`;
 
   const coverImage = product.coverImage || product.images?.[0];
 
@@ -97,7 +99,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   };
 
   return (
-    <div className="bg-[#000000] min-h-screen py-10">
+    <div className="bg-[#f5f5f7] min-h-screen py-10">
       {/* Inject JSON-LD */}
       <script
         type="application/ld+json"
@@ -106,23 +108,23 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-xs text-[#86868b]">
-          <Link href="/" className="hover:text-white transition-colors">
+        <nav className="flex items-center gap-2 text-xs text-[#6e6e73]">
+          <Link href="/" className="hover:text-[#1d1d1f] transition-colors">
             الرئيسية
           </Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-white transition-colors">
+          <Link href="/products" className="hover:text-[#1d1d1f] transition-colors">
             الكتالوج
           </Link>
           <span>/</span>
           <Link
             href={`/products?brand=${encodeURIComponent(product.brand)}`}
-            className="hover:text-white transition-colors"
+            className="hover:text-[#1d1d1f] transition-colors"
           >
             {product.brand}
           </Link>
           <span>/</span>
-          <span className="text-[#f5f5f7] font-medium line-clamp-1 max-w-xs">
+          <span className="text-[#1d1d1f] font-medium line-clamp-1 max-w-xs">
             {product.titleAr || product.title}
           </span>
         </nav>
@@ -132,13 +134,13 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
         {/* Related Products Recommendation */}
         {relatedProducts.length > 0 && (
-          <section className="pt-16 border-t border-white/[0.08] space-y-8">
+          <section className="pt-16 border-t border-black/[0.08] space-y-8">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider font-mono">
+                <span className="text-xs font-semibold text-[#6e6e73] uppercase tracking-wider font-mono">
                   موديلات مشابهة
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-semibold text-[#f5f5f7] mt-1 tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-[#1d1d1f] mt-1 tracking-tight">
                   أجهزة أخرى قد تهمك
                 </h2>
               </div>

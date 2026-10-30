@@ -181,3 +181,14 @@ export function normalizeAccessoryCategory(raw: string): string {
   };
   return map[clean] || clean;
 }
+
+/** Canonical ERP accessory departments, also used by public navigation. */
+export const ACCESSORY_DEPARTMENTS = [
+  { value: 'charger', label: 'شواحن' },
+  { value: 'case', label: 'جرابات' },
+  { value: 'cable', label: 'كابلات' },
+  { value: 'earphone', label: 'سماعات' },
+  { value: 'power_bank', label: 'باور بانك' },
+  { value: 'screen_protector', label: 'حماية الشاشة' },
+  { value: 'other', label: 'إكسسوارات أخرى' },
+] as const;

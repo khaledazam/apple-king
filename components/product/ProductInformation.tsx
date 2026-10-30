@@ -74,15 +74,15 @@ export function ProductInformation({
     <div className="space-y-8">
       {/* Official Apple Store Header: Eyebrow & Share */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs text-[#86868b]">
+        <div className="flex items-center justify-between text-xs text-[#6e6e73]">
           <div className="flex items-center gap-2">
-            <span className="font-medium text-[#f5f5f7]">{product.brand}</span>
+            <span className="font-medium text-[#1d1d1f]">{product.brand}</span>
             <span>•</span>
             <span>{product.productType === 'phone' ? 'هاتف ذكي' : 'إكسسوار أصلي'}</span>
             {product.isFeatured && (
               <>
                 <span>•</span>
-                <span className="text-[#2997ff]">إصدار مميز</span>
+                <span className="text-[#0066cc]">إصدار مميز</span>
               </>
             )}
           </div>
@@ -90,57 +90,57 @@ export function ProductInformation({
           <button
             type="button"
             onClick={handleShare}
-            className="p-1.5 text-[#86868b] hover:text-[#f5f5f7] transition-colors flex items-center gap-1.5 text-xs"
+            className="p-1.5 text-[#6e6e73] hover:text-[#1d1d1f] transition-colors flex items-center gap-1.5 text-xs"
             title="مشاركة رابط المنتج"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-[#2997ff]" /> : <Share2 className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-[#0066cc]" /> : <Share2 className="w-3.5 h-3.5" />}
             <span>{copied ? 'تم النسخ' : 'مشاركة'}</span>
           </button>
         </div>
 
         {/* Main Product Title */}
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#f5f5f7] tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-[#1d1d1f] tracking-tight leading-tight">
           {product.titleAr || product.title}
         </h1>
 
         {product.descriptionAr && (
-          <p className="text-sm text-[#86868b] leading-relaxed pt-1">
+          <p className="text-sm text-[#6e6e73] leading-relaxed pt-1">
             {product.descriptionAr}
           </p>
         )}
       </div>
 
       {/* Official Apple Price Stack */}
-      <div className="py-4 border-y border-white/[0.08] flex items-baseline justify-between">
+      <div className="py-4 border-y border-black/[0.08] flex items-baseline justify-between">
         <div>
-          <span className="text-xs text-[#86868b] block">سعر البيع كاش</span>
+          <span className="text-xs text-[#6e6e73] block">سعر البيع كاش</span>
           <div className="pt-1">
             {product.requiresPriceConfirmation ? (
-              <span className="text-lg font-medium text-[#2997ff]">السعر يحتاج تأكيد المبيعات</span>
+              <span className="text-lg font-medium text-[#0066cc]">السعر يحتاج تأكيد المبيعات</span>
             ) : hasPromo ? (
               <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-semibold text-[#f5f5f7] tracking-tight">
+                <span className="text-3xl font-semibold text-[#1d1d1f] tracking-tight">
                   {formatEGP(currentPromo as number)}
                 </span>
-                <span className="text-base line-through text-[#86868b]">
+                <span className="text-base line-through text-[#6e6e73]">
                   {formatEGP(currentPrice)}
                 </span>
               </div>
             ) : (
-              <span className="text-3xl sm:text-4xl font-semibold text-[#f5f5f7] tracking-tight">
+              <span className="text-3xl sm:text-4xl font-semibold text-[#1d1d1f] tracking-tight">
                 {formatEGP(currentPrice)}
               </span>
             )}
           </div>
         </div>
 
-        <span className="text-xs text-[#86868b]">شامل الضمان المعتمد</span>
+        <span className="text-xs text-[#6e6e73]">شامل الضمان المعتمد</span>
       </div>
 
       {/* Out of Stock Notice (Apple Style) */}
       {isOutOfStock && (
-        <div className="p-4 rounded-2xl bg-[#1d1d1f] border border-white/[0.08] text-xs text-[#86868b] flex items-center gap-2.5">
-          <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#86868b]" />
+        <div className="p-4 rounded-2xl bg-[#f5f5f7] border border-black/[0.08] text-xs text-[#6e6e73] flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#6e6e73]" />
           <span>هذا الموديل غير متوفر حاليًا بالفرع. يمكنك الاستفسار عن موعد الشحنة القادمة عبر واتساب.</span>
         </div>
       )}
@@ -166,20 +166,20 @@ export function ProductInformation({
           <span>{isOutOfStock ? 'اسأل عن التوفر عبر واتساب' : 'استفسر واحجز عبر واتساب'}</span>
         </a>
 
-        <p className="text-[11px] text-center text-[#86868b]">
-          تواصل مباشر مع مبيعات فروع APPLE KING • استلام فوري ومعاينة كاملة للجهاز بالفرع
+        <p className="text-[11px] text-center text-[#6e6e73]">
+          تواصل مباشر مع مبيعات فروع ملك التفاحه • استلام فوري ومعاينة كاملة للجهاز بالفرع
         </p>
       </div>
 
       {/* Apple Specifications Block */}
       {product.specifications && Object.keys(product.specifications).length > 0 && (
-        <div className="pt-6 border-t border-white/[0.08] space-y-3">
-          <h3 className="text-sm font-semibold text-[#f5f5f7]">المواصفات الفنية المعتمدة</h3>
-          <div className="rounded-2xl border border-white/[0.08] bg-[#161617] divide-y divide-white/[0.06] text-xs">
+        <div className="pt-6 border-t border-black/[0.08] space-y-3">
+          <h3 className="text-sm font-semibold text-[#1d1d1f]">المواصفات الفنية المعتمدة</h3>
+          <div className="rounded-2xl border border-black/[0.08] bg-white divide-y divide-white/[0.06] text-xs">
             {Object.entries(product.specifications).map(([key, val]) => (
               <div key={key} className="flex justify-between p-3.5">
-                <span className="text-[#86868b] font-normal">{key}</span>
-                <span className="text-[#f5f5f7] font-medium font-mono">{val}</span>
+                <span className="text-[#6e6e73] font-normal">{key}</span>
+                <span className="text-[#1d1d1f] font-medium font-mono">{val}</span>
               </div>
             ))}
           </div>

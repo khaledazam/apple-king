@@ -14,13 +14,13 @@ export function ProductGrid({
 }: ProductGridProps) {
   if (!products || products.length === 0) {
     return (
-      <div className="py-20 px-4 text-center rounded-3xl bg-[#0D0D0D] border border-neutral-800/80 space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-500 mx-auto">
+      <div className="py-20 px-4 text-center rounded-3xl bg-white border border-[#d2d2d7] space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex items-center justify-center text-neutral-500 mx-auto">
           <PackageOpen className="w-8 h-8" />
         </div>
         <div className="space-y-1">
-          <h3 className="text-base font-bold text-neutral-200">{emptyMessage}</h3>
-          <p className="text-xs text-neutral-400 max-w-md mx-auto">
+          <h3 className="text-base font-bold text-[#1d1d1f]">{emptyMessage}</h3>
+          <p className="text-xs text-[#6e6e73] max-w-md mx-auto">
             جرّب تغيير كلمات البحث، إزالة بعض الفلاتر، أو تصفح الأقسام الأخرى.
           </p>
         </div>

@@ -2,11 +2,11 @@ import React from 'react';
 
 export default function Loading() {
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4 bg-[#000000]">
+    <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4 bg-[#f5f5f7]">
       {/* Sleek Apple Silhouette */}
-      <div className="w-12 h-12 rounded-2xl bg-[#161617] border border-white/[0.08] flex items-center justify-center animate-pulse">
+      <div className="w-12 h-12 rounded-2xl bg-white border border-black/[0.08] flex items-center justify-center animate-pulse">
         <svg
-          className="w-6 h-6 text-[#f5f5f7]"
+          className="w-6 h-6 text-[#1d1d1f]"
           viewBox="0 0 24 24"
           fill="currentColor"
         >
@@ -15,10 +15,10 @@ export default function Loading() {
       </div>
 
       <div className="space-y-1 text-center">
-        <span className="text-xs font-mono font-medium text-[#86868b] tracking-widest uppercase">
-          APPLE KING
+        <span className="text-xs font-mono font-medium text-[#6e6e73] tracking-widest uppercase">
+          ملك التفاحه
         </span>
-        <p className="text-xs text-[#86868b]">جاري تجهيز الكتالوج الرسمي...</p>
+        <p className="text-xs text-[#6e6e73]">جاري تجهيز الكتالوج الرسمي...</p>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Image from '@/components/ui/CatalogImage';
 import { Camera, Sparkles } from 'lucide-react';
 import { PublicMediaItem } from '@/types/catalog';
 
@@ -46,10 +46,10 @@ export function ProductGallery({
   return (
     <div className="space-y-4">
       {/* Main Large Display Frame - Apple Studio Viewport */}
-      <div className="relative aspect-square w-full rounded-[28px] bg-[#161617] border border-white/[0.08] p-8 flex items-center justify-center overflow-hidden shadow-2xl">
+      <div className="relative aspect-square w-full rounded-[28px] bg-white border border-black/[0.08] p-8 flex items-center justify-center overflow-hidden shadow-2xl">
         {/* Dynamic Color Match Badge */}
         {selectedColor && (
-          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 border border-white/[0.1] backdrop-blur-md text-[11px] font-normal text-[#f5f5f7]">
+          <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-black/[0.1] backdrop-blur-md text-[11px] font-normal text-[#1d1d1f]">
             {hasColorSpecificImages ? (
               <>
                 <span className="w-2 h-2 rounded-full bg-[#0071e3]" />
@@ -57,8 +57,8 @@ export function ProductGallery({
               </>
             ) : (
               <>
-                <Camera className="w-3.5 h-3.5 text-[#86868b]" />
-                <span className="text-[#86868b]">صور الموديل الرسمي ({selectedColor})</span>
+                <Camera className="w-3.5 h-3.5 text-[#6e6e73]" />
+                <span className="text-[#6e6e73]">صور الموديل الرسمي ({selectedColor})</span>
               </>
             )}
           </div>
@@ -84,10 +84,10 @@ export function ProductGallery({
                 key={idx}
                 type="button"
                 onClick={() => setSelectedImage(img)}
-                className={`relative w-20 h-20 flex-shrink-0 rounded-2xl bg-[#161617] border overflow-hidden p-2 transition-all min-w-[44px] min-h-[44px] ${
+                className={`relative w-20 h-20 flex-shrink-0 rounded-2xl bg-white border overflow-hidden p-2 transition-all min-w-[44px] min-h-[44px] ${
                   isSelected
                     ? 'border-[#0071e3] ring-2 ring-[#0071e3]/30 scale-105'
-                    : 'border-white/[0.08] hover:border-white/[0.2] opacity-70 hover:opacity-100'
+                    : 'border-black/[0.08] hover:border-black/[0.2] opacity-70 hover:opacity-100'
                 }`}
                 aria-label={`عرض الصورة ${idx + 1}`}
               >
