@@ -8,7 +8,7 @@ export async function GET() {
     const filters = await getCatalogFilters();
     return NextResponse.json({
       status: 'success',
-      data: filters.storages || [],
+      data: filters.storageOptions || [],
     });
   } catch {
     return NextResponse.json({

@@ -430,10 +430,16 @@ button, a { touch-action: manipulation; }
 
 /* A small sculpted gold crown sits on the word itself. */
 .king-logo-type { padding-top: 29px; gap: 5px; }
-.king-logo-type strong { white-space: nowrap; font-weight: 700; line-height: 1.25; }
+.king-logo-type strong { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font-weight: 700; line-height: 1.25; }
 .king-logo-royal-word { position: relative; display: inline-block; color: #b88d40; }
 .royal-word-crown { position: absolute; width: 53px; height: 35px; right: 50%; top: -28px; transform: translateX(50%) rotate(8deg); transform-origin: center bottom; filter: drop-shadow(0 2px 2px #0005); pointer-events: none; }
 .king-nav .king-logo-royal-word, .king-footer .king-logo-royal-word { color: #e8c987; }
+/* White Apple Logo in brand navigation */
+.king-apple-inline { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; }
+.king-apple-logo { width: 20px; height: 20px; fill: #ffffff; color: #ffffff; filter: drop-shadow(0 2px 6px rgba(255,255,255,.25)); transition: transform .2s ease, filter .2s ease; }
+.king-logo:hover .king-apple-logo { transform: scale(1.08); filter: drop-shadow(0 2px 10px rgba(255,255,255,.5)); }
+.apple-nav:not(.king-nav) .king-apple-logo { fill: #1d1d1f; color: #1d1d1f; filter: none; }
+@media (max-width: 760px) { .king-apple-logo { width: 17px; height: 17px; } }
 @media (max-width: 760px) { .king-logo-type { padding-top: 28px; } .royal-word-crown { width: 45px; height: 30px; top: -24px; } }
 
 /* Accessory departments mirror the ERP category keys. */

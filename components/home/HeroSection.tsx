@@ -24,7 +24,7 @@ export function HeroSection() {
           <p className="king-eyebrow" dir="ltr"><span /> THE PRO COLLECTION</p>
           <h1 id="hero-title" dir="ltr">iPhone 18<span>Pro Max</span></h1>
           <div className="king-hero-arabic" dir="rtl">
-            <h2>فيه اختيارات بتشبهك.</h2>
+            <h2>ملك التفاحه - اختيارك الاول والاخير</h2>
             <p>تفاصيل تحبّها، وإحساس مختلف في كل لمسة.<br />خلّينا نساعدك تلاقي الـ iPhone المناسب ليك.</p>
           </div>
           <div className="king-hero-actions">

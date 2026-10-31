@@ -20,8 +20,11 @@ export interface WhatsAppInquiryParams {
  */
 export function sanitizeWhatsAppNumber(rawNumber?: string): string {
   const defaultNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '201097976407';
-  const target = rawNumber || defaultNumber;
-  return target.replace(/\D/g, '');
+  let target = (rawNumber || defaultNumber).replace(/\D/g, '');
+  if (target.startsWith('01') && target.length === 11) {
+    target = '2' + target;
+  }
+  return target;
 }
 
 /**

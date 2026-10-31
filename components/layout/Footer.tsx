@@ -33,8 +33,8 @@ export function Footer() {
               الوجهة المتخصصة في هواتف آبل وسامسونج الأصلية والإكسسوارات المعتمدة، مع تجربة استلام فورية وضمان معتمد.
             </p>
             <div className="footer-contact">
-              <span className="footer-contact-name">احمد عبدالعزيز</span>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="footer-contact-number" aria-label="تواصل مع احمد عبدالعزيز على واتساب 01097976407"><MessageCircle size={17} aria-hidden="true" /><span dir="ltr">01097976407</span></a>
+              <span className="footer-contact-name">ملك التفاحه في مصر</span>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="footer-contact-number" aria-label="تواصل مع مبيعات ملك التفاحه في مصر على واتساب 01097976407"><MessageCircle size={17} aria-hidden="true" /><span dir="ltr">01097976407</span></a>
             </div>
             <div className="pt-2">
               <a

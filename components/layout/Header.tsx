@@ -17,7 +17,7 @@ export function Header() {
 
   const whatsappNumber = sanitizeWhatsAppNumber();
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    'مرحبًا، أود الاستفسار عن الأجهزة والإكسسوارات المتاحة في متجر ملك التفاحه.'
+    'مرحبًا، أود الاستفسار عن الأجهزة والإكسسوارات المتاحة في متجر ملك التفاحه في مصر.'
   )}`;
 
   const navLinks = [
