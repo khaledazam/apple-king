@@ -17,7 +17,6 @@ export function HeroSection() {
   return (
     <section className="king-hero" aria-labelledby="hero-title">
       <div className="king-hero-art" aria-hidden="true">
-        <span className="king-hero-backdrop" dir="ltr">PRO</span>
         <Image src="/branding/iphone-18-burgundy-cinematic.png" alt="" fill priority sizes="100vw" className="king-hero-image" />
       </div>
       <div className="king-hero-inner">
