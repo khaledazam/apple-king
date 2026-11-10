@@ -107,8 +107,8 @@ export function HeroSection() {
           {/* ── Fast Trust Metrics Bar ── */}
           <div className="king-stats-strip" dir="rtl">
             <div className="king-stat-item">
-              <strong>+10,000</strong>
-              <span>عميل يثق بنا</span>
+              <strong>معاينة وتجربة</strong>
+              <span>افحص جهازك قبل الشراء</span>
             </div>
             <div className="king-stat-divider" />
             <div className="king-stat-item">
