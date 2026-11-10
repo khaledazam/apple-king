@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { motion, type Variants } from 'framer-motion';
 import { PublicCatalogProduct } from '@/types/catalog';
 import { ProductCard } from './ProductCard';
 import { PackageOpen } from 'lucide-react';
@@ -8,9 +11,34 @@ interface ProductGridProps {
   emptyMessage?: string;
 }
 
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.04,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 280,
+      damping: 24,
+    },
+  },
+};
+
 export function ProductGrid({
   products,
-  emptyMessage = 'لا توجد منتجات مطابقة في الكتالوج حاليًا.',
+  emptyMessage = 'لا توجد منتجات مطابقة في الكتالوج حالياً.',
 }: ProductGridProps) {
   if (!products || products.length === 0) {
     return (
@@ -29,10 +57,17 @@ export function ProductGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6">
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6"
+    >
       {products.map((product) => (
-        <ProductCard key={product.id || product.slug} product={product} />
+        <motion.div key={product.id || product.slug} variants={itemVariants} className="h-full">
+          <ProductCard product={product} />
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }
