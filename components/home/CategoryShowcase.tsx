@@ -17,7 +17,7 @@ export function CategoryShowcase({ phones = [] }: { phones?: PublicCatalogProduc
   const samsungImage = phones.find(p => p.brand.toLowerCase() === 'samsung' && (p.coverImage || p.images[0]));
   return (
     <section id="collections" className="shop-section" aria-labelledby="departments-title">
-      <div className="shop-heading"><div><p className="shop-eyebrow">THE COLLECTIONS</p><h2 id="departments-title">كل اللي بتدور عليه.<span> في مكان واحد.</span></h2></div><Link href="/products" className="shop-text-link">تصفح الكتالوج <ChevronLeft size={16} /></Link></div>
+      <div className="shop-heading"><div><p className="shop-eyebrow">THE COLLECTIONS</p><h2 id="departments-title">كل اللي بتدور عليه.<span> في مكان واحد.</span></h2></div><Link href="/products" className="shop-text-link">تصفح الاستور <ChevronLeft size={16} /></Link></div>
       <nav className="shop-shortcuts" aria-label="أقسام التسوق">{shortcuts.map(({ title, href, icon: Icon }) => <Link href={href} key={title}><span><Icon size={27} strokeWidth={1.35} aria-hidden="true" /></span><strong>{title}</strong></Link>)}</nav>
       <div className="department-grid">
         <InteractiveSurface>
@@ -38,7 +38,7 @@ export function CategoryShowcase({ phones = [] }: { phones?: PublicCatalogProduc
           {samsungImage ? <Image src={samsungImage.coverImage || samsungImage.images[0]} width={76} height={92} alt="" className="mini-device-image" /> : <Smartphone size={45} strokeWidth={1} aria-hidden="true" />}
           <div><span>Samsung Galaxy</span><h3>اختيارات أكتر. إمكانيات أوسع.</h3><p>تصفح هواتف سامسونج المتاحة.</p></div><ChevronLeft size={20} />
         </Link>
-        <Link href="/products" className="department-mini department-mini-warm"><SlidersHorizontal size={36} strokeWidth={1.3} aria-hidden="true" /><div><span>اختيار على مقاسك</span><h3>عارف بتدور على إيه؟</h3><p>حدد العلامة، الحالة، السعة والسعر من الكتالوج.</p></div><ChevronLeft size={20} /></Link>
+        <Link href="/products" className="department-mini department-mini-warm"><SlidersHorizontal size={36} strokeWidth={1.3} aria-hidden="true" /><div><span>اختيار على مقاسك</span><h3>عارف بتدور على إيه؟</h3><p>حدد العلامة، الحالة، السعة والسعر من الاستور.</p></div><ChevronLeft size={20} /></Link>
       </div>
     </section>
   );

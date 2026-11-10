@@ -18,7 +18,7 @@ export default function Loading() {
         <span className="text-xs font-mono font-medium text-[#6e6e73] tracking-widest uppercase">
           ملك التفاحه
         </span>
-        <p className="text-xs text-[#6e6e73]">جاري تجهيز الكتالوج الرسمي...</p>
+        <p className="text-xs text-[#6e6e73]">جاري تجهيز الاستور الرسمي...</p>
       </div>
     </div>
   );

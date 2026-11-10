@@ -10,10 +10,10 @@ import { ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'كتالوج الهواتف والآيفون | ملك التفاحه — أحمد عبد العزيز (السنبلاوين)',
+  title: 'استور الهواتف والآيفون | ملك التفاحه — أحمد عبد العزيز (السنبلاوين)',
   description: 'تصفح أحدث أسعار وموديلات هواتف آيفون وسامسونج الأصلية وأجهزة كسر زيرو بضمان وإكسسوارات معتمدة في متجر ملك التفاحه (أحمد عبد العزيز) في السنبلاوين، محافظة الدقهلية.',
   keywords: [
-    'كتالوج ملك التفاحه',
+    'استور ملك التفاحه',
     'اسعار الايفون السنبلاوين',
     'ايفون السنبلاوين',
     'ملك التفاحه احمد عبد العزيز',
@@ -64,7 +64,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               الرئيسية
             </Link>
             <span>/</span>
-            <span className="text-[#1d1d1f] font-medium">كتالوج المنتجات</span>
+            <span className="text-[#1d1d1f] font-medium">استور المنتجات</span>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>

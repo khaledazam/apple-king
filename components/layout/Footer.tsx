@@ -14,7 +14,7 @@ export function Footer() {
         {/* Apple Style Footnotes / Disclaimers */}
         <div className="space-y-2 border-b border-black/[0.06] pb-6 text-[11px] leading-relaxed text-[#6e6e73]">
           <p>
-            ١. الأسعار المعروضة في الكتالوج بالجنيه المصري (EGP) ومحدثة بصورة دورية وفق قوائم الأسعار المعتمدة للبيع كاش.
+            ١. الأسعار المعروضة في الاستور بالجنيه المصري (EGP) ومحدثة بصورة دورية وفق قوائم الأسعار المعتمدة للبيع كاش.
           </p>
           <p>
             ٢. التوافر في الفروع يخضع لحركة المبيعات اللحظية بالمخازن؛ يُرجى تأكيد توافر اللون والسعة عبر واتساب المبيعات قبل التوجه للمتجر.
@@ -52,7 +52,7 @@ export function Footer() {
           {/* Col 2: Catalog Sections */}
           <div className="space-y-2.5">
             <h4 className="text-xs font-semibold text-[#1d1d1f] tracking-wider">
-              استكشف الكتالوج
+              استكشف الاستور
             </h4>
             <ul className="space-y-2 text-[12px]">
               <li>
@@ -111,7 +111,7 @@ export function Footer() {
             جميع الحقوق محفوظة &copy; {new Date().getFullYear()} ملك التفاحه.
           </p>
           <p>
-            كتالوج رقمي للعرض والاستفسار • الحجز والتأكيد المباشر عبر واتساب المبيعات
+            استور رقمي للعرض والاستفسار • الحجز والتأكيد المباشر عبر واتساب المبيعات
           </p>
         </div>
       </div>

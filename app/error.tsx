@@ -21,7 +21,7 @@ export default function ErrorPage({
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold text-[#1d1d1f] tracking-tight">تعذر تحميل المحتوى</h1>
           <p className="text-xs text-[#6e6e73] leading-relaxed">
-            حدث خطأ غير متوقع أثناء استرجاع بيانات الكتالوج. يمكنك إعادة المحاولة الآن أو الرجوع للصفحة الرئيسية.
+            حدث خطأ غير متوقع أثناء استرجاع بيانات الاستور. يمكنك إعادة المحاولة الآن أو الرجوع للصفحة الرئيسية.
           </p>
         </div>
 

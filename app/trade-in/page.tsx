@@ -30,7 +30,7 @@ export default function TradeInPage() {
             </Link>
             <span>/</span>
             <Link href="/products" className="hover:text-[#1d1d1f] transition-colors">
-              الكتالوج
+              الاستور
             </Link>
             <span>/</span>
             <span className="text-[#1d1d1f] font-medium">تاخدوا جهازي بكام؟</span>

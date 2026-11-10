@@ -22,7 +22,7 @@ export default function NotFound() {
           </span>
           <h1 className="text-3xl font-semibold text-[#1d1d1f] tracking-tight">الصفحة أو الموديل غير متوفر</h1>
           <p className="text-xs sm:text-sm text-[#6e6e73] leading-relaxed">
-            عذراً، قد يكون الرابط خاطئاً أو تم تحديث قائمة المنتجات المعروضة في الكتالوج.
+            عذراً، قد يكون الرابط خاطئاً أو تم تحديث قائمة المنتجات المعروضة في الاستور.
           </p>
         </div>
 
@@ -32,7 +32,7 @@ export default function NotFound() {
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs transition-colors"
           >
             <Store className="w-4 h-4" />
-            <span>تصفح الكتالوج المتاح</span>
+            <span>تصفح الاستور المتاح</span>
           </Link>
 
           <a

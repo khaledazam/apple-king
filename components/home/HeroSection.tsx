@@ -99,7 +99,7 @@ export function HeroSection() {
             <InteractiveSurface className="action-motion">
               <Link href="/products" className="king-button king-button-outline">
                 <ArrowRight size={17} />
-                <span>تصفح الكتالوج والأسعار</span>
+                <span>تصفح الاستور والأسعار</span>
               </Link>
             </InteractiveSurface>
           </div>

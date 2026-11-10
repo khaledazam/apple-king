@@ -38,7 +38,7 @@ const itemVariants: Variants = {
 
 export function ProductGrid({
   products,
-  emptyMessage = 'لا توجد منتجات مطابقة في الكتالوج حالياً.',
+  emptyMessage = 'لا توجد منتجات مطابقة في الاستور حالياً.',
 }: ProductGridProps) {
   if (!products || products.length === 0) {
     return (

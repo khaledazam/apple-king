@@ -27,7 +27,7 @@ export function Header() {
     { label: 'تاخدوا جهازي بكام؟ 🤖', href: '/trade-in' },
     { label: 'الأجهزة المستعملة', href: '/products?condition=used' },
     { label: 'الإكسسوارات', href: '/products?productType=accessory' },
-    { label: 'الكتالوج الكامل', href: '/products' },
+    { label: 'الاستور', href: '/products' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -71,7 +71,7 @@ export function Header() {
                 type="button"
                 onClick={() => { setSearchOpen(!searchOpen); setMobileMenuOpen(false); }}
                 aria-expanded={searchOpen} aria-controls="catalog-search" className="min-w-11 min-h-11 flex items-center justify-center text-[#6e6e73] hover:text-[#1d1d1f] transition-colors"
-                aria-label="بحث في الكتالوج"
+                aria-label="بحث في الاستور"
               >
                 <Search className="w-4 h-4" />
               </button>

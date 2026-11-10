@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
   if (!product) {
     return {
       title: 'المنتج غير موجود | ملك التفاحه',
-      description: 'المنتج المطلوب غير متاح حاليًا في الكتالوج العام.',
+      description: 'المنتج المطلوب غير متاح حاليًا في الاستور العام.',
     };
   }
 
@@ -114,7 +114,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           </Link>
           <span>/</span>
           <Link href="/products" className="hover:text-[#1d1d1f] transition-colors">
-            الكتالوج
+            الاستور
           </Link>
           <span>/</span>
           <Link

@@ -97,7 +97,7 @@ export function TradeInWizard() {
   const formatEGP = (num: number) => new Intl.NumberFormat('en-US').format(num) + ' ج.م';
 
   const whatsappMessage = result
-    ? `أهلًا ملك التفاحه (أحمد عبد العزيز)، عملت تقييم لهاتفي في أداة (تاخدوا جهازي بكام؟) على الكتالوج:
+    ? `أهلًا ملك التفاحه (أحمد عبد العزيز)، عملت تقييم لهاتفي في أداة (تاخدوا جهازي بكام؟) على الاستور:
 - الجهاز: ${selectedModelName} (${storage})
 - نسبة البطارية: ${batteryHealth}%
 - الحالة: ${condition === 'flawless' ? 'كسر زيرو' : condition === 'good' ? 'مستعمل نظيف' : 'مستعمل'}
