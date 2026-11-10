@@ -94,7 +94,7 @@ button, a { touch-action: manipulation; }
 .king-logo-type strong { font-size: 21px; line-height: 1.1; letter-spacing: .025em; }
 .king-logo-type > span { font-size: 11px; opacity: .7; }
 .king-nav { background: rgba(13,14,17,.96); border-bottom: 1px solid rgba(232,197,120,.08); color: #eee9dc; }
-.king-nav-inner { direction: ltr; gap: 24px; }
+.king-nav-inner { direction: rtl; gap: 24px; }
 .king-nav .king-nav-inner { height: 94px; }
 .king-nav nav { direction: rtl; }
 .king-nav .king-logo { color: #f3eddf; }
