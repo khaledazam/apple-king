@@ -82,6 +82,30 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
         </div>
 
+        {/* Trade-In AI Promo Banner */}
+        <div className="rounded-2xl bg-gradient-to-r from-[#1d1d1f] to-[#2d2d30] text-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 shadow-md border border-white/10" dir="rtl">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#d8b66b]/20 border border-[#d8b66b]/30 flex items-center justify-center text-[#f0d48a] flex-shrink-0">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-bold text-white">معاك هاتف وعايز تبيعه كاش أو تبدله؟</span>
+                <span className="px-2 py-0.5 rounded-full bg-[#d8b66b]/25 text-[#f0d48a] text-[10px] font-bold">جديد ⚡</span>
+              </div>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                استخدم أداة <strong>(تاخدوا جهازي بكام؟)</strong> لمعرفة السعر التقديري استناداً لأسعار دوبيزل والسوق المصري.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/trade-in"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#d0a753] to-[#f0d48a] hover:from-[#c59c47] hover:to-[#e2c478] text-[#221b0e] text-xs font-bold transition-all shadow-sm"
+          >
+            تاخدوا جهازي بكام؟ 🤖
+          </Link>
+        </div>
+
         {/* Main Catalog with Framer Motion & GSAP Orchestration */}
         <CatalogMotionWrapper totalProducts={pagination.total}>
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">

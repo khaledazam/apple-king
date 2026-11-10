@@ -24,9 +24,10 @@ export function Header() {
     { label: 'الرئيسية', href: '/' },
     { label: 'iPhone', href: '/products?brand=Apple&productType=phone' },
     { label: 'Samsung', href: '/products?brand=Samsung&productType=phone' },
-    { label: 'الإكسسوارات', href: '/products?productType=accessory' },
+    { label: 'تاخدوا جهازي بكام؟ 🤖', href: '/trade-in' },
     { label: 'الأجهزة المستعملة', href: '/products?condition=used' },
-    { label: 'جميع المنتجات', href: '/products' },
+    { label: 'الإكسسوارات', href: '/products?productType=accessory' },
+    { label: 'الكتالوج الكامل', href: '/products' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
