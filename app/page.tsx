@@ -8,6 +8,7 @@ import { WhatsAppSection } from '@/components/home/WhatsAppSection';
 import { AccessoryDepartments } from '@/components/catalog/AccessoryDepartments';
 import { ProductShelf } from '@/components/home/ProductShelf';
 import { ShoppingGuide } from '@/components/home/ShoppingGuide';
+import { LocalSeoSection } from '@/components/home/LocalSeoSection';
 import { getFeaturedProducts, getPublishedProducts, getCatalogBrands } from '@/lib/catalog/queries';
 import { sanitizeWhatsAppNumber } from '@/lib/whatsapp';
 import { MessageCircle } from 'lucide-react';
@@ -41,6 +42,7 @@ export default async function HomePage() {
       <ProductShelf id="accessories" eyebrow="MADE FOR YOUR EVERYDAY" title="التفاصيل اللي تكمّل يومك." subtitle="سماعات، شواحن وإكسسوارات. راجع المواصفات والتوافق مع جهازك." href="/products?productType=accessory" products={latestAccessories} />
       <ShoppingGuide />
       <ValueProposition />
+      <LocalSeoSection />
       <WhatsAppSection />
     </StorefrontMotion>
   );

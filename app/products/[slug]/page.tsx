@@ -24,11 +24,12 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     };
   }
 
-  const title = product.seo?.title || `${product.titleAr || product.title} | ملك التفاحه`;
+  const title =
+    product.seo?.title ||
+    `${product.titleAr || product.title} | سعر ومواصفات بالسنبلاوين — ملك التفاحه (أحمد عبد العزيز)`;
   const description =
     product.seo?.description ||
-    product.descriptionAr ||
-    `اشتري ${product.titleAr || product.title} بأفضل سعر كاش معتمد في مصر من فروع ملك التفاحه.`;
+    `تعرف على سعر ${product.titleAr || product.title} اليوم في السنبلاوين لدى متجر ملك التفاحه (أحمد عبد العزيز). أجهزة أصلية كاش وبالتقسيط وضمان معتمد واستلام فوري بشارع مصطفى كامل أمام بن بهاء.`;
 
   const coverImage = product.coverImage || product.images?.[0];
 
@@ -91,10 +92,16 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       '@type': 'Offer',
       priceCurrency: 'EGP',
       price: product.promoPrice || product.basePrice,
+      priceValidUntil: '2026-12-31',
       availability:
         product.totalAvailableQuantity > 0
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
+      seller: {
+        '@type': 'ElectronicsStore',
+        name: 'ملك التفاحه — أحمد عبد العزيز',
+        address: 'السنبلاوين شارع مصطفي كامل امام بن بهاء',
+      },
     },
   };
 
