@@ -39,7 +39,7 @@ export default async function CreditPortalPage() {
   }
 
   return (
-    <main className="w-full bg-[#070d19] min-h-screen">
+    <main className="w-full bg-[#f8fafc] text-slate-900 min-h-screen">
       <CreditPortalClient
         phones={phones}
         branchName="فرع السنبلاوين — شارع مصطفى كامل أمام بن بهاء"

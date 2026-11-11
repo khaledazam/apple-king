@@ -1,10 +1,18 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Logo } from '../ui/Logo';
 import { MessageCircle, MapPin, Clock } from 'lucide-react';
 import { sanitizeWhatsAppNumber } from '@/lib/whatsapp';
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/credit')) {
+    return null;
+  }
+
   const whatsappNumber = sanitizeWhatsAppNumber('201097976407');
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('مرحبًا، أود الاستفسار عن تفاصيل فروع وأجهزة ملك التفاحه.')}`;
 

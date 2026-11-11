@@ -13,7 +13,13 @@ export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const isHome = usePathname() === '/';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
+  // Hide retail header on dedicated institutional credit portal
+  if (pathname?.startsWith('/credit')) {
+    return null;
+  }
 
   const whatsappNumber = sanitizeWhatsAppNumber();
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
