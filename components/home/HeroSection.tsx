@@ -27,7 +27,7 @@ const highlights = [
 
 export function HeroSection() {
   const inquiryUrl = `https://wa.me/${sanitizeWhatsAppNumber()}?text=${encodeURIComponent(
-    'أهلًا ملك التفاحه (أحمد عبد العزيز)، عايز استفسر عن أجهزة وموديلات iPhone 18 Pro Max المتاحة وكافة الأسعار والضمان.'
+    'أهلًا ملك التفاحه في مصر، عايز استفسر عن أجهزة وموديلات iPhone 18 Pro Max المتاحة وكافة الأسعار والضمان.'
   )}`;
 
   return (
@@ -39,7 +39,7 @@ export function HeroSection() {
       <div className="king-hero-art king-hero-float" aria-hidden="true">
         <Image
           src="/branding/iphone-18-burgundy-cinematic.png"
-          alt="iPhone 18 Pro Max — ملك التفاحه أحمد عبد العزيز السنبلاوين"
+          alt="iPhone 18 Pro Max — ملك التفاحه في مصر"
           fill
           priority
           sizes="100vw"
@@ -70,7 +70,7 @@ export function HeroSection() {
           </h1>
 
           <div className="king-hero-arabic" dir="rtl">
-            <h2>ملك التفاحه · أحمد عبد العزيز — اختيارك الأول بالسنبلاوين</h2>
+            <h2>ملك التفاحه في مصر</h2>
             <p>
               تفاصيل تحبّها، وفخامة استثنائية في كل لمسة.
               <br />
@@ -141,7 +141,7 @@ export function HeroSection() {
         <span>شوف أكتر</span>
         <ArrowDown size={19} />
       </a>
-      <span className="king-art-note">تصوّر سينمائي للجهاز · ملك التفاحه (السنبلاوين)</span>
+      <span className="king-art-note">تصوّر سينمائي للجهاز · ملك التفاحه في مصر</span>
     </section>
   );
 }

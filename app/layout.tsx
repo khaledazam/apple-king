@@ -103,7 +103,7 @@ const jsonLd = {
   paymentAccepted: 'Cash, Credit Card, Installments',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'السنبلاوين',
+    streetAddress: 'السنبلاوين شارع مصطفي كامل امام بن بهاء',
     addressLocality: 'السنبلاوين',
     addressRegion: 'الدقهلية',
     addressCountry: 'EG',
@@ -131,8 +131,8 @@ const jsonLd = {
         'Saturday',
         'Sunday',
       ],
-      opens: '10:00',
-      closes: '23:30',
+      opens: '12:00',
+      closes: '24:00',
     },
   ],
 };

@@ -82,14 +82,15 @@ export function Footer() {
           <div className="space-y-2.5">
             <h4 className="text-xs font-semibold text-[#1d1d1f] tracking-wider flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-[#0071e3]" />
-              <span>المتاجر وساعات العمل</span>
+              <span>العنوان وساعات العمل</span>
             </h4>
             <ul className="space-y-2 text-[12px]">
-              <li>فرع القاهرة: مدينة نصر / التجمع الخامس</li>
-              <li>فرع الجيزة: شارع الهرم / المهندسين</li>
-              <li className="flex items-center gap-1 text-[#6e6e73] pt-1">
-                <Clock className="w-3.5 h-3.5 text-[#6e6e73]" />
-                <span>يوميًا من ١١:٠٠ صباحًا حتى ١١:٠٠ مساءً</span>
+              <li className="text-[#1d1d1f] font-medium leading-relaxed">
+                السنبلاوين شارع مصطفي كامل امام بن بهاء
+              </li>
+              <li className="flex items-center gap-1.5 text-[#6e6e73] pt-1">
+                <Clock className="w-3.5 h-3.5 text-[#0071e3]" />
+                <span>يوميًا من 12 ظهرًا حتى 12 منتصف الليل (من 12 لـ 12)</span>
               </li>
             </ul>
           </div>
