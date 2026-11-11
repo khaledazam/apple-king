@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -20,6 +20,13 @@ import {
   QrCode,
   ArrowRight,
   RefreshCw,
+  HelpCircle,
+  ChevronDown,
+  Sparkles,
+  Zap,
+  Package,
+  Layers,
+  Check,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import { sanitizeWhatsAppNumber } from '@/lib/whatsapp';
@@ -33,6 +40,7 @@ interface PhoneItem {
   basePrice: number;
   promoPrice?: number | null;
   coverImage?: string;
+  images?: string[];
   totalAvailableQuantity: number;
   variants?: {
     variantKey: string;
@@ -58,15 +66,37 @@ const DURATIONS = [
   { months: 24, label: '24 شهرًا (سنتان)', rate: 0.44, desc: 'أقل قسط شهري متاح' },
 ];
 
+const FAQS = [
+  {
+    q: 'ما هي شروط تقسيط الهواتف في فرع السنبلاوين؟',
+    a: 'بطاقة الرقم القومي سارية للمشتري والضامن، وإثبات محل إقامة بمركز السنبلاوين أو محافظة الدقهلية، ودفع المقدم المحدد بالمنظومة.',
+  },
+  {
+    q: 'هل الأجهزة المتوفرة في المنظومة مضمونة وأصلية؟',
+    a: 'نعم بنسبة 100%؛ جميع الهواتف المعروضة هي أجهزة مسجلة في سيستم المخزون بالفرع، تخضع للفحص المعتمد مع ضمان أصلي وفاتورة رسمية.',
+  },
+  {
+    q: 'ما هي مواعيد العمل بمقر الفرع لإتمام التعاقد والاستلام؟',
+    a: 'يستقبلكم الفرع يوميًا طوال أيام الأسبوع من الساعة 12:00 ظهرًا حتى الساعة 12:00 منتصف الليل (من 12 لـ 12) بشارع مصطفى كامل أمام بن بهاء.',
+  },
+  {
+    q: 'هل يمكن تقديم مقدم أعلى لتقليل قيمة القسط الشهري؟',
+    a: 'نعم بالتأكيد؛ يمكنك تعديل نسبة المقدم عبر الحاسبة حتى 70% ليتم خفض القسط الشهري تلقائيًا وفق المعادلة التمويلية.',
+  },
+];
+
 export function CreditPortalClient({
   phones,
   branchName = 'فرع السنبلاوين — شارع مصطفى كامل أمام بن بهاء',
   salesNumber = '201097976407',
 }: CreditPortalClientProps) {
-  // Selection states
+  // Navigation active tab
+  const [activeTab, setActiveTab] = useState<'home' | 'phones' | 'plans' | 'faq' | 'contact'>('home');
+
+  // Device & calculator states
   const [selectedPhoneId, setSelectedPhoneId] = useState<string>(phones[0]?.id || '');
   const [selectedDurationMonths, setSelectedDurationMonths] = useState<number>(12);
-  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(30); // Min 25%
+  const [downPaymentPercent, setDownPaymentPercent] = useState<number>(30);
 
   // Customer form inputs
   const [fullName, setFullName] = useState('');
@@ -84,8 +114,13 @@ export function CreditPortalClient({
   const [approvalDate, setApprovalDate] = useState('');
   const [approvalQrDataUrl, setApprovalQrDataUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
-  // Selected phone
+  // Refs for smooth scrolling
+  const calculatorRef = useRef<HTMLDivElement>(null);
+  const phonesRef = useRef<HTMLDivElement>(null);
+
+  // Selected phone & price
   const selectedPhone = useMemo(() => {
     return phones.find((p) => p.id === selectedPhoneId) || phones[0];
   }, [phones, selectedPhoneId]);
@@ -95,7 +130,7 @@ export function CreditPortalClient({
     return selectedPhone.promoPrice || selectedPhone.basePrice || 0;
   }, [selectedPhone]);
 
-  // Installment calculations
+  // Financial calculations
   const calc = useMemo(() => {
     const downPayment = Math.round((devicePrice * downPaymentPercent) / 100);
     const financedAmount = Math.max(0, devicePrice - downPayment);
@@ -170,7 +205,6 @@ export function CreditPortalClient({
       setApprovalCode(generatedCode);
       setApprovalDate(now);
 
-      // Generate QR Code data URL containing the approval summary
       const qrPayload = JSON.stringify({
         ref: generatedCode,
         client: fullName,
@@ -199,6 +233,11 @@ export function CreditPortalClient({
     }, 3200);
   };
 
+  const handleSelectDeviceFromList = (id: string) => {
+    setSelectedPhoneId(id);
+    calculatorRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -212,158 +251,630 @@ export function CreditPortalClient({
 المقدم المحسوب: ${calc.downPayment.toLocaleString('ar-EG')} ج.م
 القسط الشهري: ${calc.monthlyInstallment.toLocaleString('ar-EG')} ج.م لمدة ${calc.months} شهور
 الفرع: السنبلاوين (شارع مصطفى كامل أمام بن بهاء)
-تم إجراء الفحص الائتماني والقبول المشروط عبر السيستم.`;
+تم الفحص الائتماني والقبول المشروط عبر المنظومة.`;
 
   const salesWhatsAppUrl = `https://wa.me/${sanitizeWhatsAppNumber(
     salesNumber
   )}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <div className="min-h-screen bg-[#070d19] text-[#e2e8f0] py-8 sm:py-14 px-3 sm:px-6 font-sans selection:bg-[#0071e3] selection:text-white" dir="rtl">
+    <div className="min-h-screen bg-[#060b18] text-[#f1f5f9] font-sans selection:bg-[#d4af37] selection:text-[#060b18] relative overflow-x-hidden" dir="rtl">
       
-      {/* ── Official Institutional Top Bar ── */}
-      <div className="max-w-5xl mx-auto mb-6 bg-[#0b162c] border border-blue-900/40 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-900 flex items-center justify-center text-white shadow-lg border border-blue-400/30">
-            <Building2 className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-widest font-mono">
-                CONSUMER CREDIT SYSTEM
+      {/* ── Ambient Golden Swirls and Background Glow ── */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-br from-amber-500/15 via-blue-600/10 to-transparent rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute top-40 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-blue-500/15 via-amber-400/10 to-transparent rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute top-0 inset-x-0 h-[850px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950/40 via-[#060b18] to-[#060b18] pointer-events-none -z-0" />
+
+      {/* ============================================================== */}
+      {/* 1. TOP OFFICIAL HEADER WITH BANK PARTNER LOGOS (EXACT DESIGN) */}
+      {/* ============================================================== */}
+      <header className="relative z-20 border-b border-amber-500/20 bg-[#070e20]/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* Upper Tier: Portal Brand + Partner Banks Pill + Help Center */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4 py-3.5 border-b border-white/[0.06]">
+            
+            {/* Left/Right: Brand Identity with Gold Phone Silhouette */}
+            <Link href="/credit" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-b from-[#d4af37] to-[#aa8012] p-0.5 shadow-lg shadow-amber-950/40">
+                <div className="w-full h-full bg-[#0a1428] rounded-[10px] flex items-center justify-center text-amber-400">
+                  <Smartphone className="w-5 h-5 stroke-[2.2]" />
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm sm:text-base font-bold text-white tracking-wide leading-tight group-hover:text-amber-300 transition-colors">
+                  Consumer Credit & Installment Portal
+                </div>
+                <div className="text-[11px] text-amber-400/90 font-medium">
+                  بوابة التمويل الاستهلاكي والتقسيط — ملك التفاحه
+                </div>
+              </div>
+            </Link>
+
+            {/* Center: Banking Partners Banner Pill */}
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 bg-[#0a142c]/90 border border-amber-400/30 rounded-full px-4 py-1.5 shadow-inner">
+              <span className="text-[11px] text-slate-300 font-medium whitespace-nowrap">
+                بالتعاون مع شركائنا من البنوك
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium">
-                ● جلسة مشفرة ومحققة
-              </span>
+              <div className="flex items-center gap-2.5 text-xs text-white divide-x divide-x-reverse divide-white/20">
+                {/* NBE Badge */}
+                <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-400 pl-2">
+                  <span className="w-3.5 h-3.5 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] text-white">N</span>
+                  <span>الأهلي المصري</span>
+                </div>
+                {/* Banque Misr Badge */}
+                <div className="flex items-center gap-1 text-[11px] font-bold text-amber-300 px-2">
+                  <span className="w-3.5 h-3.5 rounded-full bg-amber-600 flex items-center justify-center text-[9px] text-white">M</span>
+                  <span>بنك مصر</span>
+                </div>
+                {/* CIB Badge */}
+                <div className="flex items-center gap-1 text-[11px] font-bold text-blue-400 px-2 font-mono">
+                  <span>CIB</span>
+                </div>
+                {/* QNB Badge */}
+                <div className="flex items-center gap-1 text-[11px] font-bold text-purple-300 px-2 font-mono">
+                  <span>QNB</span>
+                </div>
+                {/* ADIB Badge */}
+                <div className="flex items-center gap-1 text-[11px] font-bold text-sky-300 pr-2">
+                  <span>أبوظبي الإسلامي</span>
+                </div>
+              </div>
             </div>
-            <h1 className="text-base sm:text-xl font-bold text-white tracking-tight">
-              منظومة الائتمان وتقييم المخاطر — ملك التفاحه
-            </h1>
-            <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-              <span>{branchName}</span>
-              <span>•</span>
-              <span className="font-mono text-slate-500">كود الفرع: SEN-EG-01</span>
-            </p>
+
+            {/* Right/Left: Help Center & Branch Status */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/credit/qr"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium transition-colors"
+                title="عرض لافتة الـ QR المعتمدة للطباعة"
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                <span>لافتة الـ QR للفرع</span>
+              </Link>
+              <a
+                href={`https://wa.me/${sanitizeWhatsAppNumber(salesNumber)}?text=${encodeURIComponent('مرحبًا، أود الاستفسار عن برامج التقسيط ومركز المساعدة في فرع السنبلاوين.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white transition-colors"
+              >
+                <HelpCircle className="w-4 h-4 text-amber-400" />
+                <span>مركز المساعدة</span>
+              </a>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 border-slate-800/80 pt-3 sm:pt-0">
-          <div className="text-left font-mono text-[11px] text-slate-400">
-            <div>SECURITY: 256-BIT SSL</div>
-            <div className="text-emerald-400 font-semibold">BRANCH CONNECTED</div>
-          </div>
-          <Link
-            href="/credit/qr"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 text-xs transition-colors"
-            title="عرض وطباعة الـ QR Code الخاص بالفرع"
-          >
-            <QrCode className="w-4 h-4" />
-            <span>لافتة الـ QR</span>
-          </Link>
-        </div>
-      </div>
+          {/* Lower Tier: Elegant Dark Navigation Bar with Gold Active Indicator */}
+          <nav className="flex items-center justify-center sm:justify-start gap-6 sm:gap-10 py-3 text-xs sm:text-sm font-medium overflow-x-auto no-scrollbar">
+            <button
+              onClick={() => {
+                setActiveTab('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className={`pb-1 transition-all relative whitespace-nowrap ${
+                activeTab === 'home'
+                  ? 'text-white font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>الرئيسية</span>
+              {activeTab === 'home' && (
+                <span className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_8px_#d4af37]" />
+              )}
+            </button>
 
-      {/* ── Security Notice Ribbon ── */}
-      <div className="max-w-5xl mx-auto mb-8 bg-amber-500/10 border-r-4 border-amber-500 rounded-xl p-3.5 sm:p-4 text-xs text-amber-200/90 leading-relaxed flex items-start gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div>
-          <strong className="block text-amber-300 font-bold mb-0.5">
-            إشعار نظامي ملزم لمشتري أجهزة التقسيط:
-          </strong>
-          حسابات الأقساط والمقدمات ونسب المرابحة محددة آلياً بواسطة المنظومة المركزية لإدارة الائتمان والالتزام المالي. موظف المبيعات غير مصرح له بقبول أي تفاوض يدوي أو تعديل في جدول السداد أو التنازل عن الشروط الجزائية.
-        </div>
-      </div>
+            <button
+              onClick={() => {
+                setActiveTab('phones');
+                phonesRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`pb-1 transition-all relative whitespace-nowrap ${
+                activeTab === 'phones'
+                  ? 'text-white font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>الهواتف المتاحة</span>
+              {activeTab === 'phones' && (
+                <span className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_8px_#d4af37]" />
+              )}
+            </button>
 
-      {/* ── Main Work Area ── */}
-      <div className="max-w-5xl mx-auto">
+            <button
+              onClick={() => {
+                setActiveTab('plans');
+                calculatorRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`pb-1 transition-all relative whitespace-nowrap ${
+                activeTab === 'plans'
+                  ? 'text-white font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>خطط التقسيط</span>
+              {activeTab === 'plans' && (
+                <span className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_8px_#d4af37]" />
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('faq');
+                document.getElementById('credit-faq')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className={`pb-1 transition-all relative whitespace-nowrap ${
+                activeTab === 'faq'
+                  ? 'text-white font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>الأسئلة الشائعة</span>
+              {activeTab === 'faq' && (
+                <span className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_8px_#d4af37]" />
+              )}
+            </button>
+
+            <a
+              href={`https://wa.me/${sanitizeWhatsAppNumber(salesNumber)}?text=${encodeURIComponent('أهلًا، أريد التواصل مع إدارة ائتمان فرع السنبلاوين.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-slate-200 pb-1 whitespace-nowrap transition-colors"
+            >
+              <span>تواصل معنا</span>
+            </a>
+          </nav>
+
+        </div>
+      </header>
+
+      {/* ============================================================== */}
+      {/* 2. HERO SECTION — EXACT LUXURY GOLD & BLUE STYLING FROM IMAGE   */}
+      {/* ============================================================== */}
+      <section className="relative z-10 pt-8 sm:pt-14 pb-12 sm:pb-20 overflow-hidden">
         
-        {/* ================= STEP 1: CALCULATOR & APPLICATION ================= */}
+        {/* Curved Golden Light Swoosh Vector in Background */}
+        <div className="absolute inset-0 pointer-events-none opacity-40">
+          <svg className="w-full h-full" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
+            <path
+              d="M-100 150 C 300 0, 700 350, 1540 80"
+              stroke="url(#goldStroke1)"
+              strokeWidth="2.5"
+              strokeDasharray="8 8"
+            />
+            <path
+              d="M-50 220 C 400 40, 800 420, 1500 120"
+              stroke="url(#goldStroke2)"
+              strokeWidth="4"
+            />
+            <defs>
+              <linearGradient id="goldStroke1" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#d4af37" stopOpacity="0.1" />
+                <stop offset="50%" stopColor="#ffe29a" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#aa8012" stopOpacity="0.1" />
+              </linearGradient>
+              <linearGradient id="goldStroke2" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#aa8012" stopOpacity="0" />
+                <stop offset="40%" stopColor="#ffe29a" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#d4af37" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          
+          {/* Main 3-Column Hero Grid: Left Copy + Center Phone Podium + Right Glass Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+            
+            {/* Left Block (Cols 1-5): Gold Headline, Subtitle, 4 Badges */}
+            <div className="lg:col-span-5 space-y-6 text-center lg:text-right">
+              
+              {/* Gold Pill Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 border border-amber-400/40 shadow-sm text-xs font-semibold text-amber-300">
+                <Smartphone className="w-3.5 h-3.5 text-amber-400" />
+                <span>تمويل وتقسيط الهواتف الذكية</span>
+              </div>
+
+              {/* Mega Headline */}
+              <div className="space-y-1">
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+                  امتلك هاتفك الآن
+                </h1>
+                <div className="text-3xl sm:text-5xl lg:text-6xl font-black bg-gradient-to-l from-amber-200 via-amber-400 to-[#d4af37] bg-clip-text text-transparent leading-tight drop-shadow-sm">
+                  بالتقسيط المريح
+                </div>
+              </div>
+
+              {/* Subtitle */}
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                منصة آمنة لطلب التمويل الاستهلاكي بالتعاون مع شركائنا من البنوك الرائدة، بخطوات سهلة وسريعة وموافقة معتمدة لفرع السنبلاوين.
+              </p>
+
+              {/* 4 Circular / Rounded Trust Badges */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 max-w-md mx-auto lg:mx-0 text-center">
+                <div className="p-3 rounded-2xl bg-slate-900/60 border border-amber-400/20 backdrop-blur-sm space-y-1.5 transition-transform hover:-translate-y-1">
+                  <div className="w-8 h-8 rounded-full bg-amber-400/10 text-amber-400 mx-auto flex items-center justify-center">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200 block">معتمد من البنوك</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-900/60 border border-amber-400/20 backdrop-blur-sm space-y-1.5 transition-transform hover:-translate-y-1">
+                  <div className="w-8 h-8 rounded-full bg-amber-400/10 text-amber-400 mx-auto flex items-center justify-center">
+                    <Calendar className="w-4 h-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200 block">خطط تقسيط مرنة</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-900/60 border border-amber-400/20 backdrop-blur-sm space-y-1.5 transition-transform hover:-translate-y-1">
+                  <div className="w-8 h-8 rounded-full bg-amber-400/10 text-amber-400 mx-auto flex items-center justify-center">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200 block">موافقة سريعة وفورية</span>
+                </div>
+
+                <div className="p-3 rounded-2xl bg-slate-900/60 border border-amber-400/20 backdrop-blur-sm space-y-1.5 transition-transform hover:-translate-y-1">
+                  <div className="w-8 h-8 rounded-full bg-amber-400/10 text-amber-400 mx-auto flex items-center justify-center">
+                    <Lock className="w-4 h-4" />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-200 block">بياناتك آمنة بالكامل</span>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => calculatorRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                  className="px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-[#b8860b] hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-sm shadow-xl shadow-amber-500/20 transition-all transform hover:scale-[1.03] flex items-center gap-2"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>ابدأ طلب التقسيط الآن</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => phonesRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                  className="px-6 py-3.5 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-amber-400/30 text-sm font-semibold transition-colors"
+                >
+                  <span>عرض الأجهزة المتوفرة</span>
+                </button>
+              </div>
+
+            </div>
+
+            {/* Center Block (Cols 6-9): 3D Phone Showcase with Glowing Golden Pedestal */}
+            <div className="lg:col-span-4 relative flex items-center justify-center py-4">
+              
+              {/* Golden Ambient Podium Light */}
+              <div className="absolute bottom-6 w-72 h-16 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
+              
+              {/* Podium Ring */}
+              <div className="relative w-full max-w-[340px] aspect-[4/5] flex items-center justify-center">
+                {/* Circular Gold Platform Base */}
+                <div className="absolute bottom-4 inset-x-8 h-12 rounded-full border-2 border-amber-400/60 bg-gradient-to-t from-amber-500/20 to-transparent shadow-[0_0_35px_rgba(212,175,55,0.4)]" />
+
+                {/* Smartphones Group Image / Showcase */}
+                <div className="relative z-10 w-full h-full flex items-center justify-center">
+                  <Image
+                    src="/branding/credit-hero-design.jpg"
+                    alt="هواتف التقسيط المعتمدة — آيفون وسامسونج وشاومي"
+                    fill
+                    priority
+                    className="object-contain filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.8)] transform hover:scale-105 transition-transform duration-500 rounded-3xl"
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Block (Cols 10-12): Floating Glassmorphism Feature Card */}
+            <div className="lg:col-span-3">
+              <div className="backdrop-blur-xl bg-slate-900/60 border-2 border-amber-400/40 rounded-3xl p-6 sm:p-7 shadow-[0_0_35px_rgba(212,175,55,0.15)] space-y-4 max-w-sm mx-auto">
+                <div className="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-amber-400/20 pb-2 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>مزايا التمويل الحصري</span>
+                </div>
+
+                <ul className="space-y-3.5 text-xs sm:text-sm font-bold text-white">
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-amber-400/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>مقدم يبدأ من 0%</span>
+                  </li>
+
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-amber-400/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>فترات سداد مرنة</span>
+                  </li>
+
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-amber-400/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>بدون إجراءات معقدة</span>
+                  </li>
+
+                  <li className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-amber-400/20 text-amber-400 border border-amber-400/50 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </span>
+                    <span>موافقات سريعة</span>
+                  </li>
+                </ul>
+
+                <div className="pt-2 border-t border-white/10 text-[11px] text-slate-400">
+                  متاح لأهالي مركز السنبلاوين والدقهلية
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ============================================================== */}
+          {/* 3. BOTTOM PROCESS BAR (EXACT 5 STEPS FROM USER'S DESIGN)        */}
+          {/* ============================================================== */}
+          <div className="bg-[#0b162c]/90 backdrop-blur-md border-2 border-amber-400/30 rounded-3xl p-4 sm:p-6 shadow-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 items-center text-center">
+              
+              {/* Step 1: QR Scan */}
+              <div className="flex flex-col items-center gap-2 p-2">
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/40 text-amber-400 flex items-center justify-center shadow">
+                  <QrCode className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-white leading-tight">
+                  امسح رمز QR<br />
+                  <span className="text-[11px] font-normal text-slate-400">لبدء طلب التمويل</span>
+                </div>
+              </div>
+
+              {/* Step 2: Choose Phone */}
+              <div className="flex flex-col items-center gap-2 p-2 relative">
+                <span className="hidden sm:block absolute right-[-14px] top-1/2 -translate-y-1/2 text-amber-400/40 font-mono text-xl">‹</span>
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/40 text-amber-400 flex items-center justify-center shadow">
+                  <Smartphone className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-white leading-tight">
+                  اختر هاتفك<br />
+                  <span className="text-[11px] font-normal text-slate-400">المناسب من المخزون</span>
+                </div>
+              </div>
+
+              {/* Step 3: Complete Data */}
+              <div className="flex flex-col items-center gap-2 p-2 relative">
+                <span className="hidden sm:block absolute right-[-14px] top-1/2 -translate-y-1/2 text-amber-400/40 font-mono text-xl">‹</span>
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/40 text-amber-400 flex items-center justify-center shadow">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-white leading-tight">
+                  أكمل بيانات<br />
+                  <span className="text-[11px] font-normal text-slate-400">طلب التمويل</span>
+                </div>
+              </div>
+
+              {/* Step 4: Bank Approval */}
+              <div className="flex flex-col items-center gap-2 p-2 relative">
+                <span className="hidden sm:block absolute right-[-14px] top-1/2 -translate-y-1/2 text-amber-400/40 font-mono text-xl">‹</span>
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/40 text-amber-400 flex items-center justify-center shadow">
+                  <Building2 className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-white leading-tight">
+                  استلم الموافقة<br />
+                  <span className="text-[11px] font-normal text-slate-400">من البنك والسيستم</span>
+                </div>
+              </div>
+
+              {/* Step 5: Pickup */}
+              <div className="flex flex-col items-center gap-2 p-2 relative">
+                <span className="hidden sm:block absolute right-[-14px] top-1/2 -translate-y-1/2 text-amber-400/40 font-mono text-xl">‹</span>
+                <div className="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-400/40 text-amber-400 flex items-center justify-center shadow">
+                  <Package className="w-6 h-6" />
+                </div>
+                <div className="text-xs font-bold text-white leading-tight">
+                  استلم هاتفك<br />
+                  <span className="text-[11px] font-normal text-slate-400">بكل سهولة من الفرع</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ============================================================== */}
+      {/* 4. LIVE IN-STOCK PHONES (LINKED DIRECTLY TO SYSTEM INVENTORY)   */}
+      {/* ============================================================== */}
+      <section ref={phonesRef} id="phones" className="py-14 sm:py-20 border-t border-slate-800 bg-[#070e20]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800 pb-5">
+            <div>
+              <span className="text-xs font-bold text-amber-400 font-mono uppercase tracking-widest block">
+                INVENTORY SYNC • LIVE
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-white mt-1">
+                الهواتف المتاحة للتقسيط الفوري بالفرع
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                تحديث لحظي من سيستم المخزون — تظهر فقط الأجهزة المتوفرة فعليًا للتسليم في فرع السنبلاوين.
+              </p>
+            </div>
+            <div className="text-xs px-3.5 py-1.5 rounded-full bg-slate-900 border border-amber-400/30 text-amber-300 font-medium">
+              {phones.length} أجهزة متوفرة حالياً بالسيستم
+            </div>
+          </div>
+
+          {phones.length === 0 ? (
+            <div className="p-12 text-center text-slate-400 bg-slate-900/60 rounded-3xl border border-slate-800">
+              <p className="text-lg font-bold text-white">لا توجد أجهزة متوفرة للتقسيط حالياً في المخزون.</p>
+              <p className="text-xs text-slate-500 mt-2">
+                يُرجى التواصل مع إدارة الفرع لتأكيد الأجهزة الجاري استلامها.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {phones.map((phone) => {
+                const isSelected = phone.id === selectedPhoneId;
+                const price = phone.promoPrice || phone.basePrice;
+                const minDown = Math.round(price * 0.25);
+                const estMonthly = Math.round(((price - minDown) * 1.24) / 12);
+
+                return (
+                  <div
+                    key={phone.id}
+                    onClick={() => handleSelectDeviceFromList(phone.id)}
+                    className={`cursor-pointer rounded-3xl p-5 border transition-all duration-300 flex flex-col justify-between relative group ${
+                      isSelected
+                        ? 'bg-gradient-to-b from-[#0b1c3a] to-[#071328] border-amber-400 shadow-xl shadow-amber-950/40 ring-2 ring-amber-400'
+                        : 'bg-slate-900/60 border-slate-800 hover:border-amber-400/50 hover:bg-slate-900'
+                    }`}
+                  >
+                    {isSelected && (
+                      <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black flex items-center gap-1 shadow">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                        <span>الجهاز المحدد</span>
+                      </div>
+                    )}
+
+                    <div className="space-y-3">
+                      {/* Image / Thumbnail placeholder */}
+                      <div className="aspect-[4/3] rounded-2xl bg-black/40 border border-white/5 relative overflow-hidden flex items-center justify-center p-3">
+                        {phone.coverImage || phone.images?.[0] ? (
+                          <Image
+                            src={phone.coverImage || phone.images![0]}
+                            alt={phone.titleAr || phone.title}
+                            fill
+                            className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <Smartphone className="w-12 h-12 text-slate-600" />
+                        )}
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="font-bold text-amber-400 font-mono">{phone.brand}</span>
+                          <span className="text-emerald-400 font-medium flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            متاح ({phone.totalAvailableQuantity})
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-sm sm:text-base text-white line-clamp-2">
+                          {phone.titleAr || phone.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-white/10 mt-4 space-y-2">
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-xs text-slate-400">سعر الكاش:</span>
+                        <span className="font-bold text-base text-white font-mono">
+                          {price.toLocaleString('ar-EG')} <span className="text-xs text-slate-400 font-sans">ج.م</span>
+                        </span>
+                      </div>
+
+                      <div className="flex items-baseline justify-between text-xs bg-amber-500/10 p-2 rounded-xl border border-amber-500/20 text-amber-300">
+                        <span>قسط تقديري يبدأ من:</span>
+                        <strong className="font-mono font-black text-amber-300 text-sm">
+                          {estMonthly.toLocaleString('ar-EG')} ج.م/ش
+                        </strong>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectDeviceFromList(phone.id);
+                        }}
+                        className={`w-full py-2.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-1.5 mt-2 ${
+                          isSelected
+                            ? 'bg-amber-400 text-slate-950 shadow'
+                            : 'bg-slate-800 text-slate-200 hover:bg-amber-400 hover:text-slate-950'
+                        }`}
+                      >
+                        <CreditCard className="w-3.5 h-3.5" />
+                        <span>احسب القسط وقدم الآن</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+        </div>
+      </section>
+
+      {/* ============================================================== */}
+      {/* 5. INTERACTIVE CALCULATOR & CREDIT ASSESSMENT WORKSPACE         */}
+      {/* ============================================================== */}
+      <section ref={calculatorRef} id="plans" className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6">
+        
+        {/* Security / Non-negotiable Notice */}
+        <div className="mb-8 bg-amber-500/10 border-r-4 border-amber-400 rounded-2xl p-4 sm:p-5 text-xs text-amber-200 leading-relaxed flex items-start gap-3 shadow-lg">
+          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+          <div>
+            <strong className="block text-amber-300 font-bold mb-1 text-sm">
+              إشعار نظامي ملزم (عدم إمكانية التفاوض اليدوي):
+            </strong>
+            حسابات الأقساط والمقدمات ونسب الفائدة مبرمجة إلكترونيًا وفق المنظومة الموحدة لتقييم المخاطر الائتمانية. موظفو الفرع والمبيعات غير مخولين بأي صلاحيات لتعديل المبالغ أو استثناء أي عميل من شروط السداد واللائحة الجزائية.
+          </div>
+        </div>
+
+        {/* WORKFLOW VIEW: CALCULATOR -> SCANNING -> APPROVAL TICKET */}
         {step === 'calc' && (
           <form onSubmit={handleStartEvaluation} className="space-y-8">
             
-            {/* Section A: Live Device Selection */}
-            <div className="bg-[#0b162c] rounded-3xl p-5 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+            {/* Step 1: Selected Device Banner */}
+            <div className="bg-[#0b162c] rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                 <div>
-                  <span className="text-xs font-semibold text-blue-400 font-mono">STEP 01</span>
-                  <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                    <Smartphone className="w-5 h-5 text-blue-400" />
-                    <span>تحديد الجهاز المتاح في مخزون الفرع</span>
-                  </h2>
+                  <span className="text-xs font-bold text-amber-400 font-mono">STEP 01</span>
+                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                    <Smartphone className="w-5 h-5 text-amber-400" />
+                    <span>الجهاز المختار من مخزون الفرع</span>
+                  </h3>
                 </div>
-                <div className="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-300 font-medium">
-                  {phones.length} أجهزة متوفرة حالياً بالسيستم
+                <div className="text-xs text-slate-400">
+                  فرع السنبلاوين — شارع مصطفى كامل أمام بن بهاء
                 </div>
               </div>
 
-              {phones.length === 0 ? (
-                <div className="p-8 text-center text-slate-400 bg-slate-900/60 rounded-2xl border border-slate-800">
-                  <p className="text-base font-semibold text-slate-300">
-                    لا تتوفر أجهزة مخصصة للتقسيط المباشر في المخزون الحالي.
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    يُرجى مراجعة إدارة الفرع لتأكيد الأجهزة قيد الاستلام.
-                  </p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/80 border border-amber-400/20">
+                <div>
+                  <span className="text-[10px] text-amber-400 uppercase font-mono font-bold">{selectedPhone?.brand}</span>
+                  <div className="text-base sm:text-lg font-bold text-white">
+                    {selectedPhone?.titleAr || selectedPhone?.title}
+                  </div>
+                  <div className="text-xs text-emerald-400 mt-0.5">
+                    ● متاح للتسليم الفوري بالفرع ({selectedPhone?.totalAvailableQuantity} أجهزة)
+                  </div>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {phones.map((phone) => {
-                    const isSelected = phone.id === selectedPhoneId;
-                    const price = phone.promoPrice || phone.basePrice;
-                    return (
-                      <div
-                        key={phone.id}
-                        onClick={() => setSelectedPhoneId(phone.id)}
-                        className={`cursor-pointer rounded-2xl p-4 border transition-all duration-200 relative flex flex-col justify-between ${
-                          isSelected
-                            ? 'bg-blue-950/40 border-blue-500 shadow-lg shadow-blue-950/50 ring-1 ring-blue-500'
-                            : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
-                        }`}
-                      >
-                        {isSelected && (
-                          <div className="absolute top-3 left-3 w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shadow">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                          </div>
-                        )}
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">
-                              {phone.brand}
-                            </span>
-                            <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                              متاح بالفرع ({phone.totalAvailableQuantity})
-                            </span>
-                          </div>
-                          <h3 className="font-bold text-sm text-white line-clamp-2">
-                            {phone.titleAr || phone.title}
-                          </h3>
-                        </div>
 
-                        <div className="pt-4 border-t border-slate-800/80 mt-4 flex items-baseline justify-between">
-                          <span className="text-xs text-slate-400">سعر الكاش:</span>
-                          <span className="font-bold text-base text-amber-400 font-mono">
-                            {price.toLocaleString('ar-EG')} <span className="text-xs text-slate-300 font-sans">ج.م</span>
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="text-left sm:text-right">
+                  <span className="text-xs text-slate-400 block">سعر الكاش:</span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
+                    {devicePrice.toLocaleString('ar-EG')} <span className="text-xs text-slate-300 font-sans">ج.م</span>
+                  </span>
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* Section B: Installment Plan & Financial Matrix */}
-            <div className="bg-[#0b162c] rounded-3xl p-5 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-              <div className="border-b border-slate-800/80 pb-4">
-                <span className="text-xs font-semibold text-blue-400 font-mono">STEP 02</span>
-                <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                  <CreditCard className="w-5 h-5 text-blue-400" />
+            {/* Step 2: Duration & Down Payment Calculator */}
+            <div className="bg-[#0b162c] rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6">
+              <div className="border-b border-slate-800 pb-4">
+                <span className="text-xs font-bold text-amber-400 font-mono">STEP 02</span>
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-amber-400" />
                   <span>تحديد خطة السداد والمقدم الإلزامي</span>
-                </h2>
+                </h3>
               </div>
 
-              {/* Duration Buttons */}
+              {/* Durations */}
               <div className="space-y-3">
                 <label className="text-xs font-semibold text-slate-300 block">
                   مدة التمويل المطلوبة:
@@ -376,14 +887,14 @@ export function CreditPortalClient({
                         type="button"
                         key={plan.months}
                         onClick={() => setSelectedDurationMonths(plan.months)}
-                        className={`p-3.5 rounded-xl border text-right transition-all ${
+                        className={`p-4 rounded-2xl border text-right transition-all ${
                           isSelected
-                            ? 'bg-blue-600 text-white border-blue-400 shadow-md'
+                            ? 'bg-gradient-to-b from-[#102447] to-[#09172f] text-white border-amber-400 shadow-lg shadow-amber-950/40 ring-1 ring-amber-400'
                             : 'bg-slate-900/80 border-slate-800 text-slate-300 hover:border-slate-700'
                         }`}
                       >
-                        <div className="font-bold text-sm">{plan.label}</div>
-                        <div className={`text-[11px] mt-1 ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>
+                        <div className="font-bold text-sm text-white">{plan.label}</div>
+                        <div className={`text-[11px] mt-1 ${isSelected ? 'text-amber-300' : 'text-slate-400'}`}>
                           {plan.desc}
                         </div>
                       </button>
@@ -393,10 +904,10 @@ export function CreditPortalClient({
               </div>
 
               {/* Down Payment Slider */}
-              <div className="space-y-3 bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-800">
+              <div className="space-y-3 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
                 <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
                   <span className="text-slate-300">نسبة المقدم المدفوع:</span>
-                  <span className="text-amber-400 font-bold font-mono text-base">
+                  <span className="text-amber-400 font-bold font-mono text-base sm:text-lg">
                     {downPaymentPercent}% ({calc.downPayment.toLocaleString('ar-EG')} ج.م)
                   </span>
                 </div>
@@ -407,7 +918,7 @@ export function CreditPortalClient({
                   step="5"
                   value={downPaymentPercent}
                   onChange={(e) => setDownPaymentPercent(Number(e.target.value))}
-                  className="w-full accent-blue-500 h-2 bg-slate-800 rounded-lg cursor-pointer"
+                  className="w-full accent-amber-400 h-2.5 bg-slate-800 rounded-lg cursor-pointer"
                 />
                 <div className="flex justify-between text-[11px] text-slate-500 font-mono">
                   <span>الحد الأدنى الإلزامي (25%)</span>
@@ -415,47 +926,47 @@ export function CreditPortalClient({
                 </div>
               </div>
 
-              {/* Breakdown Matrix Board */}
-              <div className="bg-gradient-to-br from-[#071328] to-[#040914] rounded-2xl p-5 border border-blue-900/50 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {/* Financial Matrix Summary */}
+              <div className="bg-gradient-to-br from-[#071328] to-[#040914] rounded-2xl p-5 border border-amber-400/20 grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
-                  <span className="text-[11px] text-slate-400 block">المقدم المطلوب سداده:</span>
+                  <span className="text-[11px] text-slate-400 block">المقدم المطلوب:</span>
                   <strong className="text-base sm:text-lg text-white font-mono font-bold">
                     {calc.downPayment.toLocaleString('ar-EG')} ج.م
                   </strong>
                 </div>
 
                 <div>
-                  <span className="text-[11px] text-slate-400 block">المبلغ المتبقي للتمويل:</span>
+                  <span className="text-[11px] text-slate-400 block">المبلغ الممول:</span>
                   <strong className="text-base sm:text-lg text-slate-300 font-mono font-bold">
                     {calc.financedAmount.toLocaleString('ar-EG')} ج.م
                   </strong>
                 </div>
 
                 <div>
-                  <span className="text-[11px] text-slate-400 block">تاريخ القسط الشهري:</span>
+                  <span className="text-[11px] text-slate-400 block">ميعاد السداد الشهري:</span>
                   <strong className="text-base sm:text-lg text-slate-300 font-bold">
                     يوم 5 من كل شهر
                   </strong>
                 </div>
 
-                <div className="col-span-2 sm:col-span-1 bg-blue-600/20 border border-blue-500/40 rounded-xl p-2.5 sm:p-2 text-center">
-                  <span className="text-[11px] text-blue-300 block font-semibold">القسط الشهري الإلزامي:</span>
-                  <span className="text-xl sm:text-2xl font-black text-amber-400 font-mono">
+                <div className="col-span-2 sm:col-span-1 bg-amber-400/10 border border-amber-400/40 rounded-xl p-3 text-center">
+                  <span className="text-[11px] text-amber-300 block font-semibold">القسط الشهري الإلزامي:</span>
+                  <span className="text-2xl font-black text-amber-300 font-mono">
                     {calc.monthlyInstallment.toLocaleString('ar-EG')}
                   </span>
-                  <span className="text-xs text-blue-200 block">ج.م / شهرياً</span>
+                  <span className="text-xs text-amber-200/80 block">ج.م / شهرياً</span>
                 </div>
               </div>
             </div>
 
-            {/* Section C: Customer Identity & Verification */}
-            <div className="bg-[#0b162c] rounded-3xl p-5 sm:p-8 border border-slate-800 shadow-xl space-y-6">
-              <div className="border-b border-slate-800/80 pb-4">
-                <span className="text-xs font-semibold text-blue-400 font-mono">STEP 03</span>
-                <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                  <UserCheck className="w-5 h-5 text-blue-400" />
+            {/* Step 3: Identity & Credit Check Form */}
+            <div className="bg-[#0b162c] rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-2xl space-y-6">
+              <div className="border-b border-slate-800 pb-4">
+                <span className="text-xs font-bold text-amber-400 font-mono">STEP 03</span>
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  <UserCheck className="w-5 h-5 text-amber-400" />
                   <span>بيانات العميل وفحص الجدارة الائتمانية</span>
-                </h2>
+                </h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -468,8 +979,8 @@ export function CreditPortalClient({
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="مثال: محمد أحمد عبد الرحمن إبراهيم"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="مثال: أحمد محمد علي إبراهيم"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-400"
                   />
                 </div>
 
@@ -484,7 +995,7 @@ export function CreditPortalClient({
                     value={nationalId}
                     onChange={(e) => setNationalId(e.target.value.replace(/\D/g, ''))}
                     placeholder="الرقم القومي المكون من 14 رقمًا"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono tracking-widest focus:outline-none focus:border-blue-500 text-left"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono tracking-widest focus:outline-none focus:border-amber-400 text-left"
                     dir="ltr"
                   />
                 </div>
@@ -499,7 +1010,7 @@ export function CreditPortalClient({
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="010XXXXXXXX"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono text-left focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono text-left focus:outline-none focus:border-amber-400"
                     dir="ltr"
                   />
                 </div>
@@ -514,20 +1025,20 @@ export function CreditPortalClient({
                     value={residenceArea}
                     onChange={(e) => setResidenceArea(e.target.value)}
                     placeholder="السنبلاوين أو اسم القرية"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-400"
                   />
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-slate-300">
-                    اسم الضامن وصلة القرابة (درجة أولى)
+                    اسم الضامن وصلة القرابة
                   </label>
                   <input
                     type="text"
                     value={guarantorName}
                     onChange={(e) => setGuarantorName(e.target.value)}
-                    placeholder="الاسم وصلة القرابة (اختياري للتقييم الأولي)"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500"
+                    placeholder="الاسم وصلة القرابة (درجة أولى)"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-amber-400"
                   />
                 </div>
 
@@ -540,26 +1051,26 @@ export function CreditPortalClient({
                     value={guarantorPhone}
                     onChange={(e) => setGuarantorPhone(e.target.value)}
                     placeholder="01XXXXXXXXX"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono text-left focus:outline-none focus:border-blue-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-500 text-sm font-mono text-left focus:outline-none focus:border-amber-400"
                     dir="ltr"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Section D: Strict Penal Terms & Legal Agreement */}
-            <div className="bg-[#120808] rounded-3xl p-5 sm:p-8 border border-red-900/40 shadow-xl space-y-4">
+            {/* Step 4: Penal Terms & Strict Legal Agreement */}
+            <div className="bg-[#120808] rounded-3xl p-6 sm:p-8 border border-red-900/40 shadow-xl space-y-4">
               <div className="flex items-center gap-2 text-red-400 font-bold text-base sm:text-lg border-b border-red-900/40 pb-3">
                 <Scale className="w-5 h-5 shrink-0" />
                 <span>اللائحة الجزائية وإقرار الالتزام بالسداد القانوني</span>
               </div>
 
-              <div className="space-y-2.5 text-xs text-slate-300 leading-relaxed bg-black/40 p-4 rounded-xl border border-red-950">
+              <div className="space-y-2 text-xs text-slate-300 leading-relaxed bg-black/40 p-4 rounded-xl border border-red-950">
                 <p>
-                  <strong>١. مواعيد السداد:</strong> يلتزم العميل بسداد القسط الشهري في موعد أقصاه اليوم الخامس من كل شهر ميلادي بمقر فرع السنبلاوين أو عبر المحافظ المعتمدة.
+                  <strong>١. مواعيد السداد:</strong> يلتزم العميل بسداد القسط الشهري في موعد أقصاه اليوم الخامس من كل شهر ميلادي بمقر فرع السنبلاوين.
                 </p>
                 <p>
-                  <strong>٢. غرامات التأخير الإدارية:</strong> في حال تجاوز مهلة السماح المقررة بـ (48 ساعة)، يتم احتساب رسم تأخير إداري تلقائي قدره <strong>50 جنيهًا مصريًا عن كل يوم تأخير</strong> تضاف آلياً لملف العميل بالسيستم.
+                  <strong>٢. غرامات التأخير الإدارية:</strong> في حال تجاوز مهلة السماح المقررة بـ (48 ساعة)، يتم احتساب رسم تأخير إداري تلقائي قدره <strong>50 جنيهًا مصريًا عن كل يوم تأخير</strong> تضاف آلياً لملف العميل بالمنظومة.
                 </p>
                 <p>
                   <strong>٣. التخلف عن السداد:</strong> في حال التخلف عن سداد قسطين متتاليين، يسقط أجل كافة الأقساط المتبقية وتصبح واجبة النفاذ الفوري، ويتم تحويل السندات الإذنية الموقعة وإيصالات الأمانة للشؤون القانونية للمطالبة القضائية فوراً، مع إدراج الاسم في القائمة المحظورة للتداول الائتماني بمحافظة الدقهلية.
@@ -591,10 +1102,10 @@ export function CreditPortalClient({
               <button
                 type="submit"
                 disabled={phones.length === 0}
-                className="w-full sm:w-auto px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-base shadow-xl shadow-blue-900/40 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 mx-auto"
+                className="w-full sm:w-auto px-10 py-4 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-[#b8860b] hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-base shadow-xl shadow-amber-500/20 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 mx-auto"
               >
-                <ShieldCheck className="w-5 h-5" />
-                <span>إجراء الفحص الائتماني واستخراج كود الاعتماد</span>
+                <ShieldCheck className="w-5 h-5 text-slate-950" />
+                <span>إجراء الفحص الائتماني واستخراج كود الاعتماد المعتمد</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
               <p className="text-[11px] text-slate-500 mt-2 font-mono">
@@ -604,13 +1115,12 @@ export function CreditPortalClient({
           </form>
         )}
 
-        {/* ================= STEP 2: SCANNING ANIMATION ================= */}
+        {/* WORKFLOW VIEW: SCANNING ANIMATION */}
         {step === 'evaluating' && (
-          <div className="bg-[#0b162c] rounded-3xl p-8 sm:p-14 border border-blue-900/60 shadow-2xl text-center space-y-8 max-w-2xl mx-auto my-8">
+          <div className="bg-[#0b162c] rounded-3xl p-8 sm:p-14 border border-amber-400/40 shadow-2xl text-center space-y-8 max-w-2xl mx-auto my-8">
             <div className="relative w-20 h-20 mx-auto">
-              <div className="absolute inset-0 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin" />
-              <div className="absolute inset-2 rounded-full border-4 border-amber-500/20 border-b-amber-500 animate-spin" />
-              <div className="w-full h-full flex items-center justify-center text-blue-400">
+              <div className="absolute inset-0 rounded-full border-4 border-amber-500/20 border-t-amber-400 animate-spin" />
+              <div className="w-full h-full flex items-center justify-center text-amber-400">
                 <Lock className="w-8 h-8 animate-pulse" />
               </div>
             </div>
@@ -626,14 +1136,14 @@ export function CreditPortalClient({
 
             <div className="space-y-3 max-w-md mx-auto text-xs text-right">
               <div className={`p-3 rounded-xl border flex items-center justify-between transition-colors ${
-                evaluationStage >= 1 ? 'bg-blue-950/40 border-blue-500 text-blue-200' : 'bg-slate-900/40 border-slate-800 text-slate-500'
+                evaluationStage >= 1 ? 'bg-blue-950/40 border-amber-400 text-amber-200' : 'bg-slate-900/40 border-slate-800 text-slate-500'
               }`}>
                 <span>١. التحقق من صلاحية الرقم القومي وسجل العميل</span>
                 {evaluationStage >= 1 ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <RefreshCw className="w-4 h-4 animate-spin text-slate-600" />}
               </div>
 
               <div className={`p-3 rounded-xl border flex items-center justify-between transition-colors ${
-                evaluationStage >= 2 ? 'bg-blue-950/40 border-blue-500 text-blue-200' : 'bg-slate-900/40 border-slate-800 text-slate-500'
+                evaluationStage >= 2 ? 'bg-blue-950/40 border-amber-400 text-amber-200' : 'bg-slate-900/40 border-slate-800 text-slate-500'
               }`}>
                 <span>٢. مطابقة الجهاز المختار ومخزون الفرع المتاح</span>
                 {evaluationStage >= 2 ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <RefreshCw className="w-4 h-4 animate-spin text-slate-600" />}
@@ -649,22 +1159,19 @@ export function CreditPortalClient({
           </div>
         )}
 
-        {/* ================= STEP 3: OFFICIAL APPROVAL TICKET ================= */}
+        {/* WORKFLOW VIEW: OFFICIAL APPROVAL TICKET */}
         {step === 'approved' && (
           <div className="space-y-6 max-w-3xl mx-auto">
             
-            {/* Printable Institutional Voucher */}
             <div id="approval-ticket" className="bg-white text-slate-900 rounded-3xl p-6 sm:p-10 shadow-2xl border-4 border-slate-900 space-y-6 relative overflow-hidden print:border-2 print:shadow-none">
               
-              {/* Watermark */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-5 text-center font-black text-6xl rotate-[-25deg] select-none text-slate-950">
                 APPLE KING CREDIT<br />VERIFIED SENBELLAWEIN
               </div>
 
-              {/* Voucher Top Header */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b-2 border-slate-900 pb-5">
                 <div className="text-center sm:text-right">
-                  <span className="text-[11px] font-bold text-blue-800 uppercase tracking-widest font-mono block">
+                  <span className="text-[11px] font-bold text-blue-900 uppercase tracking-widest font-mono block">
                     CONSUMER CREDIT DIGITAL APPROVAL
                   </span>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
@@ -677,14 +1184,13 @@ export function CreditPortalClient({
 
                 <div className="text-center sm:text-left font-mono">
                   <div className="text-xs font-bold text-slate-500">رقم الاعتماد المركزي:</div>
-                  <div className="text-lg sm:text-xl font-black text-blue-800 tracking-wider">
+                  <div className="text-lg sm:text-xl font-black text-blue-900 tracking-wider">
                     {approvalCode}
                   </div>
                   <div className="text-[10px] text-slate-400">{approvalDate}</div>
                 </div>
               </div>
 
-              {/* Status Banner */}
               <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-3 flex items-center justify-between text-xs text-emerald-900 font-bold">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
@@ -695,7 +1201,6 @@ export function CreditPortalClient({
                 </span>
               </div>
 
-              {/* Customer & Device Details Grid */}
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
                   <span className="text-slate-500 block">اسم المشتري:</span>
@@ -717,14 +1222,13 @@ export function CreditPortalClient({
                 </div>
 
                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                  <span className="text-slate-500 block">سعر الكاش المعتمد:</span>
+                  <span className="text-slate-500 block">سعر الكاش:</span>
                   <strong className="text-slate-900 text-sm font-mono block">
                     {devicePrice.toLocaleString('ar-EG')} ج.م
                   </strong>
                 </div>
               </div>
 
-              {/* Financial Plan Table */}
               <div className="border border-slate-300 rounded-xl overflow-hidden text-xs">
                 <table className="w-full text-right">
                   <thead className="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
@@ -750,12 +1254,10 @@ export function CreditPortalClient({
                 </table>
               </div>
 
-              {/* Penal Reminder */}
               <div className="text-[11px] text-slate-600 bg-amber-50 p-3 rounded-xl border border-amber-200 leading-relaxed">
                 <strong>تذكير باللائحة:</strong> السداد إلزامي شهريًا قبل نهاية يوم 5. بعد مهلة 48 ساعة، تُطبق غرامة تأخير 50 ج.م/يوم وتسقط الآجال في حال التخلف عن قسطين وتُحال السندات للقضاء فورًا.
               </div>
 
-              {/* QR and Verification Section */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t-2 border-slate-900">
                 <div className="space-y-1 text-center sm:text-right">
                   <div className="text-xs font-bold text-slate-900">
@@ -783,7 +1285,6 @@ export function CreditPortalClient({
               </div>
             </div>
 
-            {/* Actions Bar */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 print:hidden">
               <a
                 href={salesWhatsAppUrl}
@@ -819,7 +1320,84 @@ export function CreditPortalClient({
           </div>
         )}
 
-      </div>
+      </section>
+
+      {/* ============================================================== */}
+      {/* 6. FAQ SECTION                                                 */}
+      {/* ============================================================== */}
+      <section id="credit-faq" className="py-14 sm:py-20 border-t border-slate-800 bg-[#050914]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-bold text-amber-400 font-mono uppercase tracking-widest">
+              SUPPORT & FAQ
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-white">
+              الأسئلة الشائعة حول أنظمة التقسيط
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {FAQS.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={faq.q}
+                  className="bg-[#0b162c] rounded-2xl border border-slate-800 overflow-hidden transition-colors"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between gap-4 p-5 text-right font-bold text-sm sm:text-base text-white hover:text-amber-300 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 shrink-0 text-slate-400 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-amber-400' : ''
+                      }`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-0 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/60">
+                      <p className="pt-3">{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================== */}
+      {/* 7. BRANCH & CONTACT FOOTER                                      */}
+      {/* ============================================================== */}
+      <footer id="contact" className="border-t border-slate-800/80 bg-[#03060c] py-10 text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-right">
+          <div>
+            <div className="font-bold text-white text-sm">
+              ملك التفاحه — {branchName}
+            </div>
+            <div className="text-[11px] text-slate-500 mt-0.5">
+              مواعيد العمل: يوميًا من 12:00 ظهرًا حتى 12:00 منتصف الليل (من 12 لـ 12)
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link href="/" className="hover:text-amber-300 transition-colors">
+              الرئيسية
+            </Link>
+            <span>•</span>
+            <Link href="/products" className="hover:text-amber-300 transition-colors">
+              الاستور العام
+            </Link>
+            <span>•</span>
+            <Link href="/credit/qr" className="hover:text-amber-300 transition-colors">
+              لافتة الـ QR
+            </Link>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 }
