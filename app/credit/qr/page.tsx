@@ -73,9 +73,18 @@ export default async function CreditQrPosterPage() {
             </div>
           </div>
 
-          {/* Official Bank Partners Strip */}
-          <div className="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-md bg-slate-50 border border-slate-300 text-[11px] font-semibold text-slate-700">
-            <span>الربط المصرفي: البنك الأهلي • بنك مصر • CIB • QNB • أبوظبي الإسلامي</span>
+          {/* Official Bank Partners Strip — Logos */}
+          <div className="inline-flex items-center justify-center gap-3 px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-300">
+            <span className="text-[10px] font-bold text-slate-500 pl-2 border-l border-slate-300 hidden sm:inline">
+              الربط المصرفي:
+            </span>
+            <div className="flex items-center gap-3">
+              <img src="/branding/banks/nbe.svg" alt="البنك الأهلي المصري" className="h-4.5 sm:h-5 w-auto object-contain" />
+              <img src="/branding/banks/banque-misr.svg" alt="بنك مصر" className="h-4.5 sm:h-5 w-auto object-contain" />
+              <img src="/branding/banks/cib.svg" alt="CIB" className="h-4 sm:h-4.5 w-auto object-contain" />
+              <img src="/branding/banks/qnb.svg" alt="QNB" className="h-4 sm:h-4.5 w-auto object-contain" />
+              <img src="/branding/banks/adib.svg" alt="ADIB" className="h-4 sm:h-4.5 w-auto object-contain" />
+            </div>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black text-slate-950 pt-2 tracking-tight">

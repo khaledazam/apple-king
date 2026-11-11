@@ -326,6 +326,18 @@ export function CreditPortalClient({
               <span>BRANCH SESSION VERIFIED</span>
             </div>
 
+            {/* Approved Bank Partners Strip inside Loading Screen */}
+            <div className="pt-3 bg-white/95 rounded-xl p-2.5 shadow-sm border border-slate-700/50 flex items-center justify-center gap-3 sm:gap-4">
+              <span className="text-[10px] font-bold text-slate-600 pl-2 border-l border-slate-300">
+                الربط المصرفي:
+              </span>
+              <img src="/branding/banks/nbe.svg" alt="البنك الأهلي المصري" className="h-4 sm:h-5 w-auto object-contain" />
+              <img src="/branding/banks/banque-misr.svg" alt="بنك مصر" className="h-4 sm:h-5 w-auto object-contain" />
+              <img src="/branding/banks/cib.svg" alt="CIB" className="h-3.5 sm:h-4 w-auto object-contain" />
+              <img src="/branding/banks/qnb.svg" alt="QNB" className="h-3.5 sm:h-4 w-auto object-contain" />
+              <img src="/branding/banks/adib.svg" alt="ADIB" className="h-3.5 sm:h-4 w-auto object-contain" />
+            </div>
+
           </div>
         </div>
       )}
@@ -379,21 +391,56 @@ export function CreditPortalClient({
                 </div>
               </div>
 
-              {/* Banking & Institutional Partners Strip */}
-              <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-1.5 text-xs text-slate-600">
-                <span className="text-[11px] font-medium text-slate-500 pl-2 border-l border-slate-200">
-                  الشركاء والجهات المصرفية:
+              {/* Banking & Institutional Partners Strip — Official Bank Logos */}
+              <div className="flex items-center gap-3 bg-white border border-slate-200/90 shadow-2xs rounded-xl px-3.5 py-1.5 text-xs">
+                <span className="text-[11px] font-bold text-slate-500 pl-3 border-l border-slate-200 whitespace-nowrap hidden sm:inline">
+                  الشركاء المصرفيون:
                 </span>
-                <div className="flex items-center gap-3 font-semibold text-slate-700 text-[11px]">
-                  <span>البنك الأهلي المصري</span>
-                  <span>•</span>
-                  <span>بنك مصر</span>
-                  <span>•</span>
-                  <span className="font-mono">CIB</span>
-                  <span>•</span>
-                  <span className="font-mono">QNB</span>
-                  <span>•</span>
-                  <span>أبوظبي الإسلامي</span>
+                <div className="flex items-center gap-3 sm:gap-4">
+                  {/* NBE */}
+                  <div className="relative h-6 sm:h-7 w-auto flex items-center" title="البنك الأهلي المصري - National Bank of Egypt">
+                    <img
+                      src="/branding/banks/nbe.svg"
+                      alt="البنك الأهلي المصري"
+                      className="h-6 sm:h-7 w-auto max-w-[85px] sm:max-w-[105px] object-contain transition-all hover:scale-105"
+                    />
+                  </div>
+
+                  {/* Banque Misr */}
+                  <div className="relative h-6 sm:h-7 w-auto flex items-center" title="بنك مصر - Banque Misr">
+                    <img
+                      src="/branding/banks/banque-misr.svg"
+                      alt="بنك مصر"
+                      className="h-6 sm:h-7 w-auto max-w-[80px] sm:max-w-[95px] object-contain transition-all hover:scale-105"
+                    />
+                  </div>
+
+                  {/* CIB */}
+                  <div className="relative h-5 sm:h-6 w-auto flex items-center" title="البنك التجاري الدولي - CIB">
+                    <img
+                      src="/branding/banks/cib.svg"
+                      alt="CIB"
+                      className="h-5 sm:h-6 w-auto max-w-[55px] sm:max-w-[65px] object-contain transition-all hover:scale-105"
+                    />
+                  </div>
+
+                  {/* QNB */}
+                  <div className="relative h-5 sm:h-6 w-auto flex items-center" title="بنك قطر الوطني الأهلي - QNB">
+                    <img
+                      src="/branding/banks/qnb.svg"
+                      alt="QNB"
+                      className="h-5 sm:h-6 w-auto max-w-[65px] sm:max-w-[80px] object-contain transition-all hover:scale-105"
+                    />
+                  </div>
+
+                  {/* ADIB */}
+                  <div className="relative h-5 sm:h-6 w-auto flex items-center" title="مصرف أبوظبي الإسلامي - ADIB">
+                    <img
+                      src="/branding/banks/adib.svg"
+                      alt="مصرف أبوظبي الإسلامي"
+                      className="h-5 sm:h-6 w-auto max-w-[70px] sm:max-w-[85px] object-contain transition-all hover:scale-105"
+                    />
+                  </div>
                 </div>
               </div>
 
