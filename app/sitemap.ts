@@ -43,6 +43,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.85,
     },
+    {
+      url: `${baseUrl}/credit`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
   ];
 
   try {

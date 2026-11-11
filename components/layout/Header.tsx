@@ -25,6 +25,7 @@ export function Header() {
     { label: 'iPhone', href: '/products?brand=Apple&productType=phone' },
     { label: 'Samsung', href: '/products?brand=Samsung&productType=phone' },
     { label: 'تاخدوا جهازي بكام؟ 🤖', href: '/trade-in' },
+    { label: 'بوابة التقسيط 💳', href: '/credit' },
     { label: 'الأجهزة المستعملة', href: '/products?condition=used' },
     { label: 'الإكسسوارات', href: '/products?productType=accessory' },
     { label: 'الاستور', href: '/products' },

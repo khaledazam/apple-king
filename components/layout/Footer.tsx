@@ -75,6 +75,11 @@ export function Footer() {
                   المتاح للتسليم الفوري
                 </Link>
               </li>
+              <li>
+                <Link href="/credit" className="text-[#0071e3] font-medium hover:underline transition-colors">
+                  بوابة تقسيط الأجهزة المعتمدة
+                </Link>
+              </li>
             </ul>
           </div>
 
