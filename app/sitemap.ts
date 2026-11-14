@@ -4,7 +4,7 @@ import { getPublishedProducts } from '@/lib/catalog/queries';
 export const revalidate = 3600; // Revalidate sitemap hourly
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king-gamma.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {

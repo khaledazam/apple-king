@@ -4,7 +4,7 @@ import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king-gamma.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
 
 export const metadata: Metadata = {
   title: {

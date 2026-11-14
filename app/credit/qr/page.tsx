@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CreditQrPosterPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king-gamma.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
   const targetCreditUrl = `${baseUrl}/credit`;
 
   // Generate ultra crisp, high-contrast QR code

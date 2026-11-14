@@ -31,7 +31,7 @@ export function ProductCard({ product, featured = false }: ProductCardProps) {
     null;
 
   // Build product inquiry WhatsApp URL
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king-gamma.vercel.app').replace(/\/+$/, '');
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com').replace(/\/+$/, '');
   const productUrl = `${appUrl}/products/${product.slug}`;
 
   const inquiryUrl = buildWhatsAppInquiryUrl({
