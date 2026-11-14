@@ -34,6 +34,35 @@ export async function POST(request: NextRequest) {
 
     const db = await getStorefrontDb();
     const couponsCollection = db.collection('coupons');
+    const settingsCollection = db.collection('storefrontpromosettings');
+
+    // Fetch dynamic ERP promotion configuration
+    const setting = (await settingsCollection.findOne()) || {
+      isActive: true,
+      discountType: 'percentage',
+      discountValue: 5,
+      maxDiscountAmount: 500,
+      validityDays: 7,
+      minProductPrice: 0,
+    };
+
+    if (!setting.isActive) {
+      return NextResponse.json(
+        { status: 'error', message: 'عروض قسائم الخصم متوقفة حالياً بالمتجر.' },
+        { status: 400 }
+      );
+    }
+
+    const priceNum = Number(productPrice) || 0;
+    if (setting.minProductPrice > 0 && priceNum > 0 && priceNum < setting.minProductPrice) {
+      return NextResponse.json(
+        {
+          status: 'error',
+          message: `هذا العرض سارٍ على الأجهزة التي سعرها أكثر من ${setting.minProductPrice} ج.م.`,
+        },
+        { status: 400 }
+      );
+    }
 
     // Check if customer already has an active coupon within last 48 hours
     const existing = await couponsCollection.findOne({
@@ -72,10 +101,17 @@ export async function POST(request: NextRequest) {
     }
 
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
+    expiresAt.setDate(expiresAt.getDate() + (setting.validityDays || 7));
 
-    const priceNum = Number(productPrice) || 0;
-    const calculatedDiscount = priceNum > 0 ? Math.min(Math.round(priceNum * 0.05), 500) : 500;
+    let calculatedDiscount = 0;
+    if (setting.discountType === 'percentage') {
+      calculatedDiscount =
+        priceNum > 0
+          ? Math.min(Math.round(priceNum * (setting.discountValue / 100)), setting.maxDiscountAmount)
+          : setting.maxDiscountAmount;
+    } else {
+      calculatedDiscount = setting.discountValue;
+    }
 
     const newCoupon = {
       code,
@@ -84,9 +120,9 @@ export async function POST(request: NextRequest) {
       productTitle: productTitle ? String(productTitle).trim() : 'هاتف ذكي من الاستور',
       productSlug: productSlug ? String(productSlug).trim() : '',
       productPrice: priceNum,
-      discountType: 'percentage',
-      discountValue: 5,
-      maxDiscountAmount: 500,
+      discountType: setting.discountType,
+      discountValue: setting.discountValue,
+      maxDiscountAmount: setting.maxDiscountAmount,
       calculatedDiscount,
       isUsed: false,
       usedAt: null,

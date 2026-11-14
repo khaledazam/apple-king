@@ -22,6 +22,17 @@ interface VoucherClaimModalProps {
   productPrice?: number;
 }
 
+interface PromoConfig {
+  isActive: boolean;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  maxDiscountAmount: number;
+  validityDays: number;
+  buttonText: string;
+  badgeText: string;
+  termsAr: string;
+}
+
 export function VoucherClaimModal({
   productTitle,
   productSlug,
@@ -32,6 +43,9 @@ export function VoucherClaimModal({
   const [customerPhone, setCustomerPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Dynamic promo configuration from ERP system
+  const [promoConfig, setPromoConfig] = useState<PromoConfig | null>(null);
 
   // Result coupon state
   const [claimedCoupon, setClaimedCoupon] = useState<{
@@ -47,8 +61,34 @@ export function VoucherClaimModal({
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
-  // Calculate estimated discount
-  const estimatedDiscount = productPrice > 0 ? Math.min(Math.round(productPrice * 0.05), 500) : 500;
+  // Fetch dynamic promotion settings from ERP on mount
+  useEffect(() => {
+    fetch('/api/public/coupons/config')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data?.setting) {
+          setPromoConfig(data.data.setting);
+        }
+      })
+      .catch((err) => console.warn('Could not load dynamic promo config:', err));
+  }, []);
+
+  // Compute values from dynamic settings
+  const discountType = promoConfig?.discountType || 'percentage';
+  const discountValue = promoConfig?.discountValue ?? 5;
+  const maxCap = promoConfig?.maxDiscountAmount ?? 500;
+  const buttonText = promoConfig?.buttonText || 'احصل على قسيمة خصم بالفرع';
+  const badgeText = promoConfig?.badgeText || 'كوبون فوري';
+  const termsText =
+    promoConfig?.termsAr ||
+    'يتم إبراز كود الخصم للكاشير عند الشراء بالفرع (السنبلاوين - شارع مصطفى كامل أمام بن بهاء). الخصم ساري لمدة 7 أيام من تاريخ الإصدار.';
+
+  const estimatedDiscount =
+    discountType === 'percentage'
+      ? productPrice > 0
+        ? Math.min(Math.round(productPrice * (discountValue / 100)), maxCap)
+        : maxCap
+      : discountValue;
 
   useEffect(() => {
     if (claimedCoupon?.code) {
@@ -64,6 +104,11 @@ export function VoucherClaimModal({
         .catch((err) => console.error('QR generation error:', err));
     }
   }, [claimedCoupon]);
+
+  // If promo campaign is explicitly turned off from ERP, hide the button
+  if (promoConfig && promoConfig.isActive === false) {
+    return null;
+  }
 
   const handleClaim = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +157,7 @@ export function VoucherClaimModal({
   const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '201097976407';
   const whatsappBookingUrl = claimedCoupon
     ? `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-        `مرحباً ملك التفاحه (أحمد عبد العزيز)، قمت بحجز [${claimedCoupon.productTitle}] من الاستور الإلكتروني وحصلت على قسيمة خصم بقيمة 5% كود: [${claimedCoupon.code}] باسم [${claimedCoupon.customerName}]. سأتوجه للفرع بالسنبلاوين للمعاينة والاستلام.`
+        `مرحباً ملك التفاحه (أحمد عبد العزيز)، قمت بحجز [${claimedCoupon.productTitle}] من الاستور الإلكتروني وحصلت على قسيمة خصم كود: [${claimedCoupon.code}] باسم [${claimedCoupon.customerName}]. سأتوجه للفرع بالسنبلاوين للمعاينة والاستلام.`
       )}`
     : `https://wa.me/${whatsappPhone}`;
 
@@ -130,13 +175,15 @@ export function VoucherClaimModal({
           </div>
           <div className="text-right">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-[#1d1d1f]">احصل على قسيمة خصم 5% بالفرع</span>
+              <span className="font-bold text-sm text-[#1d1d1f]">{buttonText}</span>
               <span className="text-[10px] font-black bg-amber-500 text-slate-950 px-1.5 py-0.2 rounded-md">
-                كوبون فوري
+                {badgeText}
               </span>
             </div>
             <p className="text-xs text-[#6e6e73] mt-0.5">
-              وفر حتى <strong className="text-amber-700">{estimatedDiscount} ج.م</strong> كاش عند الاستلام من فرع السنبلاوين
+              {discountType === 'percentage'
+                ? `وفر حتى ${estimatedDiscount} ج.م كاش (${discountValue}%) عند الاستلام من فرع السنبلاوين`
+                : `خصم فوري بقيمة ${estimatedDiscount} ج.م كاش عند الاستلام من فرع السنبلاوين`}
             </p>
           </div>
         </div>
@@ -188,7 +235,7 @@ export function VoucherClaimModal({
                     <p className="font-bold text-sm text-white truncate">{productTitle}</p>
                     {productPrice > 0 && (
                       <div className="flex items-center justify-between text-xs pt-1 text-slate-300 border-t border-slate-800 mt-1.5">
-                        <span>قيمة الخصم المتوقع (5%):</span>
+                        <span>قيمة الخصم عند الاستلام:</span>
                         <span className="font-mono font-bold text-amber-400">
                           - {estimatedDiscount} ج.م
                         </span>
@@ -240,7 +287,7 @@ export function VoucherClaimModal({
                       <span>شروط صرف القسيمة بالفرع:</span>
                     </div>
                     <p className="text-slate-300 leading-relaxed">
-                      يتم إبراز كود الخصم للكاشير عند الشراء بالفرع (السنبلاوين - شارع مصطفى كامل أمام بن بهاء). الخصم 5% بحد أقصى 500 ج.م على الهواتف. القسيمة صالحة لمدة 7 أيام.
+                      {termsText}
                     </p>
                   </div>
 
@@ -272,7 +319,7 @@ export function VoucherClaimModal({
                         ★ قسيمة خصم معتمدة ★
                       </span>
                       <span className="text-[10px] font-mono text-slate-400">
-                        {new Date(claimedCoupon.expiresAt).toLocaleDateString('ar-EG')}
+                        صالح حتى: {new Date(claimedCoupon.expiresAt).toLocaleDateString('ar-EG')}
                       </span>
                     </div>
 
