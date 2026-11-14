@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { PwaInstallPrompt } from '@/components/pwa/PwaInstallPrompt';
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king-gamma.vercel.app';
 
@@ -122,6 +123,23 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'ملك التفاحه',
+  },
+  icons: {
+    icon: [
+      { url: '/icons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   other: {
     'geo.region': 'EG-DK',
@@ -265,6 +283,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" data-scroll-behavior="smooth">
       <head>
+        <meta name="theme-color" content="#060b18" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -275,6 +297,7 @@ export default function RootLayout({
           <Header />
           <main className="flex-1 w-full min-w-0">{children}</main>
           <Footer />
+          <PwaInstallPrompt />
         </MotionProvider>
       </body>
     </html>
