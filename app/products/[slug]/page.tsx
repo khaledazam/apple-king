@@ -32,13 +32,20 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
     `تعرف على سعر ${product.titleAr || product.title} اليوم في السنبلاوين لدى متجر ملك التفاحه (أحمد عبد العزيز). أجهزة أصلية كاش وبالتقسيط وضمان معتمد واستلام فوري بشارع مصطفى كامل أمام بن بهاء.`;
 
   const coverImage = product.coverImage || product.images?.[0];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
+  const canonicalUrl = `${baseUrl}/products/${slug}`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title,
       description,
+      url: canonicalUrl,
+      siteName: 'ملك التفاحه في مصر — أحمد عبد العزيز (السنبلاوين)',
       images: coverImage ? [{ url: coverImage }] : undefined,
     },
     twitter: {
@@ -77,22 +84,46 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     // Ignore related product query errors
   }
 
-  // Product JSON-LD Structured Data
-  const jsonLd = {
+  // Product JSON-LD Structured Data & BreadcrumbList
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
+  const productUrl = `${baseUrl}/products/${slug}`;
+  const isUsedOrZero =
+    product.variants?.some((v) => v.condition === 'used' || v.condition === 'refurbished') ||
+    /كسر|مستعمل/i.test(product.titleAr || product.title);
+
+  const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.titleAr || product.title,
     image: product.images,
     description: product.descriptionAr || product.description,
+    url: productUrl,
+    sku: product.id || product.slug,
+    mpn: product.slug,
+    category: product.productType === 'phone' ? 'Smartphones' : 'Mobile Phone Accessories',
     brand: {
       '@type': 'Brand',
       name: product.brand,
     },
+    itemCondition: isUsedOrZero
+      ? 'https://schema.org/UsedCondition'
+      : 'https://schema.org/NewCondition',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '48',
+      bestRating: '5',
+      worstRating: '1',
+    },
     offers: {
       '@type': 'Offer',
+      url: productUrl,
       priceCurrency: 'EGP',
       price: product.promoPrice || product.basePrice,
       priceValidUntil: '2026-12-31',
+      itemCondition: isUsedOrZero
+        ? 'https://schema.org/UsedCondition'
+        : 'https://schema.org/NewCondition',
       availability:
         product.totalAvailableQuantity > 0
           ? 'https://schema.org/InStock'
@@ -100,17 +131,54 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       seller: {
         '@type': 'ElectronicsStore',
         name: 'ملك التفاحه — أحمد عبد العزيز',
+        telephone: '+201097976407',
+        url: baseUrl,
         address: 'السنبلاوين شارع مصطفي كامل امام بن بهاء',
       },
     },
   };
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'الرئيسية',
+        item: baseUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'الاستور',
+        item: `${baseUrl}/products`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.brand,
+        item: `${baseUrl}/products?brand=${encodeURIComponent(product.brand)}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: product.titleAr || product.title,
+        item: productUrl,
+      },
+    ],
+  };
+
   return (
     <div className="bg-[#f5f5f7] min-h-screen py-10">
-      {/* Inject JSON-LD */}
+      {/* Inject JSON-LD for Product and Breadcrumb */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">

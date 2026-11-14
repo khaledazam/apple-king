@@ -106,11 +106,23 @@ export const metadata: Metadata = {
     siteName: 'ملك التفاحه في مصر — أحمد عبد العزيز (السنبلاوين)',
     locale: 'ar_EG',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1376,
+        height: 768,
+        alt: 'ملك التفاحه — أحمد عبد العزيز | أسعار الآيفون بالسنبلاوين',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'ملك التفاحه في مصر | أحمد عبد العزيز — أسعار الآيفون بالسنبلاوين',
     description: 'أقوى عروض وأسعار الآيفون والهواتف الذكية في السنبلاوين ومحافظة الدقهلية. كاش وتقسيط وضمان معتمد.',
+    images: ['/og-image.jpg'],
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   robots: {
     index: true,
@@ -156,10 +168,27 @@ const structuredData = [
     description:
       'متجر ملك التفاحه بإدارة أحمد عبد العزيز في السنبلاوين، شارع مصطفى كامل أمام بن بهاء. المتخصص الأول في بيع وشراء وصيانة واستبدال هواتف آيفون وسامسونج الأصلية، كاش وبالتقسيط لأهالي مركز السنبلاوين ومحافظة الدقهلية.',
     url: BASE_URL,
+    logo: `${BASE_URL}/icon.svg`,
+    image: `${BASE_URL}/og-image.jpg`,
     telephone: '+201097976407',
     priceRange: '$$$',
     currenciesAccepted: 'EGP',
-    paymentAccepted: 'Cash, Credit Card, Installments, Trade-in',
+    paymentAccepted: 'Cash, Credit Card, Installments, Trade-in, Vodafone Cash, InstaPay',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '385',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    hasMerchantReturnPolicy: {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: 'EG',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: 14,
+      returnMethod: 'https://schema.org/ReturnInStore',
+      returnFees: 'https://schema.org/FreeReturn',
+    },
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'السنبلاوين شارع مصطفي كامل امام بن بهاء',

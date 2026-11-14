@@ -25,6 +25,22 @@ export const metadata: Metadata = {
     'ايفون مستعمل السنبلاوين',
     'شارع مصطفى كامل السنبلاوين',
   ],
+  alternates: {
+    canonical: '/products',
+  },
+  openGraph: {
+    title: 'أسعار الآيفون في السنبلاوين | كاش وتقسيط — ملك التفاحه (أحمد عبد العزيز)',
+    description: 'قائمة أسعار أجهزة الآيفون والهواتف الأصلية بالسنبلاوين اليوم كاش وبالتقسيط. تشكيلة آيفون جديدة ومستعمل كسر زيرو بضمان معتمد.',
+    url: 'https://apple-king.com/products',
+    siteName: 'ملك التفاحه في مصر — أحمد عبد العزيز (السنبلاوين)',
+    images: ['/og-image.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'أسعار الآيفون في السنبلاوين | كاش وتقسيط — ملك التفاحه',
+    description: 'قائمة أسعار أجهزة الآيفون بالسنبلاوين كاش وبالتقسيط مع فحص وضمان معتمد.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export const dynamic = 'force-dynamic';
@@ -58,8 +74,29 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     return `/products?${params.toString()}`;
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://apple-king.com';
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'أحدث أسعار أجهزة الآيفون والهواتف بالسنبلاوين — ملك التفاحه',
+    url: `${baseUrl}/products`,
+    numberOfItems: products.length,
+    itemListElement: products.map((p, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: p.titleAr || p.title,
+      url: `${baseUrl}/products/${p.slug}`,
+      image: p.coverImage || p.images?.[0],
+    })),
+  };
+
   return (
     <div className="bg-[#f5f5f7] min-h-screen py-10">
+      {/* Inject ItemList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Page Top Heading & Breadcrumb with Animation Classes */}
         <div className="catalog-heading catalog-animate-header space-y-3 border-b border-black/[0.08] pb-6">

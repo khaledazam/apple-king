@@ -5,17 +5,33 @@ import { TradeInWizard } from '@/components/trade-in/TradeInWizard';
 import { Sparkles, ShieldCheck, Repeat, ArrowRight, Store, MapPin } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'تاخدوا جهازي بكام؟ | تسعير فوري بالذكاء الاصطناعي — ملك التفاحه (السنبلاوين)',
+  title: 'تبديل وبيع آيفون بالسنبلاوين | تاخدوا جهازي بكام؟ — ملك التفاحه (أحمد عبد العزيز)',
   description:
     'احسب سعر بيع أو استبدال هاتفك الآيفون أو السامسونج بالذكاء الاصطناعي استناداً لأسعار السوق ودوبيزل في مصر مع ملك التفاحه (أحمد عبد العزيز) بالسنبلاوين.',
   keywords: [
     'تاخدوا جهازي بكام',
     'تسعير الايفون المستعمل',
     'تبديل ايفون السنبلاوين',
+    'استبدال ايفون بالسنبلاوين',
     'بيع ايفون كاش السنبلاوين',
     'اسعار دوبيزل للايفون',
     'ملك التفاحه احمد عبد العزيز',
   ],
+  alternates: {
+    canonical: '/trade-in',
+  },
+  openGraph: {
+    title: 'تبديل واستبدال الآيفون بالسنبلاوين — ملك التفاحه',
+    description: 'احسب سعر جهازك القديم واستبدله فورياً بأعلى تقييم كاش من متجر أحمد عبد العزيز بشارع مصطفى كامل.',
+    url: 'https://apple-king.com/trade-in',
+    siteName: 'ملك التفاحه في مصر — أحمد عبد العزيز (السنبلاوين)',
+    images: ['/og-image.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'تبديل وبيع آيفون بالسنبلاوين | ملك التفاحه',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export default function TradeInPage() {

@@ -4,9 +4,25 @@ import { getPublishedProducts } from '@/lib/catalog/queries';
 import { CreditPortalClient } from '@/components/credit/CreditPortalClient';
 
 export const metadata: Metadata = {
-  title: 'منظومة الائتمان وحساب الأقساط المعتمدة | فرع السنبلاوين — ملك التفاحه',
+  title: 'تقسيط آيفون بالسنبلاوين | حساب الأقساط المعتمدة — ملك التفاحه (أحمد عبد العزيز)',
   description:
     'بوابة تقييم الجدارة الائتمانية وحساب خطط أقساط هواتف آيفون وسامسونج المعتمدة لمشتري فرع السنبلاوين (شارع مصطفى كامل أمام بن بهاء). حساب آلي ملزم واستخراج كود الاعتماد الفوري.',
+  alternates: {
+    canonical: '/credit',
+  },
+  openGraph: {
+    title: 'تقسيط آيفون بالسنبلاوين | حساب الأقساط — ملك التفاحه',
+    description:
+      'احسب قسط جهازك الآيفون في السنبلاوين بأنظمة تقسيط ميسرة ومعتمدة من متجر أحمد عبد العزيز بشارع مصطفى كامل.',
+    url: 'https://apple-king.com/credit',
+    siteName: 'ملك التفاحه في مصر — أحمد عبد العزيز (السنبلاوين)',
+    images: ['/og-image.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'تقسيط آيفون بالسنبلاوين | ملك التفاحه',
+    images: ['/og-image.jpg'],
+  },
   robots: {
     index: true,
     follow: true,
