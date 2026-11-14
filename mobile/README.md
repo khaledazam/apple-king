@@ -4,7 +4,7 @@ Flutter app for employees of the existing ERP in `D:\erp phones`. The app uses t
 
 ## Connect to the ERP
 
-- For a real phone, use an HTTPS endpoint that the phone can reach, including through the organization's VPN if applicable. Enter the endpoint on the sign-in screen or prefill it at build time with `--dart-define=ERP_URL=https://erp.example.com`.
+- The production ERP API runs at `https://mobilix-erp.onrender.com`. Enter that address on the sign-in screen or prefill it at build time with `--dart-define=ERP_URL=https://mobilix-erp.onrender.com`.
 - For an Android emulator and a running local ERP server, enter `http://10.0.2.2:5000` in a debug build.
 - Sign in with a test employee account. Enable biometric sign-in in settings, close and reopen the app, and verify Touch ID, Face ID, or Android fingerprint where enrolled. The app stores the refresh token in platform secure storage only when biometric sign-in is enabled. Signing out clears the saved session. The current ERP issues one refresh token per user, so signing in on another device can invalidate the previous saved session.
 

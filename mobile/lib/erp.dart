@@ -217,7 +217,11 @@ class ErpSession extends ChangeNotifier {
       final response = await _client
           .send(request)
           .then(http.Response.fromStream)
-          .timeout(const Duration(seconds: 12));
+          .timeout(
+            Duration(
+              seconds: path == 'auth/login' || path == 'auth/refresh' ? 60 : 15,
+            ),
+          );
       if (response.statusCode >= 300 && response.statusCode < 400) {
         throw const ErpError('استخدم عنوان سيرفر ERP النهائي.');
       }

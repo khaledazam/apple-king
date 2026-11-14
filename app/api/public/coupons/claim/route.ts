@@ -126,6 +126,7 @@ export async function POST(request: NextRequest) {
       {
         status: 'error',
         message: 'حدث خطأ أثناء إصدار كود الخصم، يرجى المحاولة مرة أخرى.',
+        details: error?.message || String(error),
       },
       { status: 500 }
     );

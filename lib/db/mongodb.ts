@@ -39,7 +39,7 @@ if (!cached) {
  * Obtains a cached MongoDB Atlas client connected with dedicated storefront credentials.
  */
 export async function getStorefrontDb(): Promise<Db> {
-  const uri = process.env.STOREFRONT_MONGODB_URI;
+  const uri = process.env.STOREFRONT_MONGODB_URI || process.env.MONGODB_URI;
 
   if (!uri) {
     throw new Error(
