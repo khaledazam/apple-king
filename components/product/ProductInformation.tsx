@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { MessageCircle, AlertCircle, Share2, Check } from 'lucide-react';
 import { PublicCatalogProduct } from '@/types/catalog';
 import { VariantSelector } from './VariantSelector';
+import { VoucherClaimModal } from './VoucherClaimModal';
 import { buildWhatsAppInquiryUrl } from '@/lib/whatsapp';
 
 interface ProductInformationProps {
@@ -154,8 +155,17 @@ export function ProductInformation({
         />
       )}
 
-      {/* Official Apple Store Primary CTA (Blue Pill) */}
+      {/* Official Apple Store Primary CTA & In-Store Discount Voucher */}
       <div className="space-y-3 pt-2">
+        {/* In-Store 5% Voucher Claim Modal */}
+        {!isOutOfStock && (
+          <VoucherClaimModal
+            productTitle={product.titleAr || product.title}
+            productSlug={product.slug}
+            productPrice={hasPromo ? (currentPromo as number) : currentPrice}
+          />
+        )}
+
         <a
           href={whatsappUrl}
           target="_blank"

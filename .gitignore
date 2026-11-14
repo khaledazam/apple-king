@@ -25,3 +25,5 @@ next-env.d.ts
 # Playwright & automated test outputs
 /test-results
 /public/qa/screenshots
+
+/.tooling/
